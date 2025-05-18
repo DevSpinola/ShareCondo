@@ -1,0 +1,94 @@
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Espaça os grupos à esquerda e à direita */
+    padding: 0 20px;
+    height: 80px; /* Ajuste conforme quiser */
+    background-color: #003366; /* Se quiser um fundo */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Sombra leve para destaque */
+  }
+  
+  .left-group {
+    display: flex;
+    align-items: center;
+  }
+  
+  .share-condo-logo {
+    width: 72px;
+    height: 72px;
+    margin-right: 16px;
+  }
+  
+  .nav-menu {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .nav-menu li {
+    margin-right: 20px;
+  }
+  
+  .nav-menu li a {
+    text-decoration: none;
+    color: #ffffff;
+    font-weight: 500;
+    transition: color 0.3s ease;
+  }
+  
+  .nav-menu li a:hover {
+    color: #007BFF; /* Cor ao passar o mouse */
+  }
+  
+  .right-group {
+    display: flex;
+    align-items: center;
+  }
+  
+  .signup-btn,
+  .login-btn,
+  .logout-btn {
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: 600;
+    margin-left: 12px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .signup-btn {
+    background-color: #007BFF;
+    color: white;
+  }
+  
+  .signup-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .login-btn {
+    background-color: transparent;
+    color: #007BFF;
+    border: 2px solid #007BFF;
+  }
+  
+  .login-btn:hover {
+    background-color: #007BFF;
+    color: white;
+  }
+  
+  .logout-btn {
+    background-color: #007BFF;    
+    color: white;
+    border: 2px solid #007BFF;
+  }
+
+  .logout-btn:hover {
+    background-color: #0056b3;
+  }
+
+  .username {
+    color: white;
+    font-weight: 600;
+    margin-left: 12px;
+  }

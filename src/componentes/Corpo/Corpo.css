@@ -1,0 +1,9 @@
+.corpo {
+  flex: 1;
+  min-height: 100%; /* ou height: 100%; se o pai já tiver altura total */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* centraliza verticalmente */  
+  background-color: #f9f9f9;
+}
