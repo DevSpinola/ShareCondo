@@ -2,10 +2,9 @@
 import axios from "axios";
 
 const ofertasAPI = axios.create({
-  baseURL: "http://localhost:8080/ofertas" // Endpoint base para ofertas
+  baseURL: "http://localhost:8080/ofertas"
 });
 
-// Interceptor para adicionar o token JWT às requisições
 ofertasAPI.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) {
@@ -16,46 +15,59 @@ ofertasAPI.interceptors.request.use((config) => {
   return Promise.reject(error);
 });
 
-// Criar uma nova oferta para um anúncio específico
 async function createOfertaParaAnuncio(anuncioId, dadosOferta) {
   const response = await ofertasAPI.post(`/anuncio/${anuncioId}`, dadosOferta);
-  return response.data; // Retorna a oferta criada
+  return response.data;
 }
 
-// Listar ofertas de um anúncio específico
 async function getOfertasPorAnuncio(anuncioId) {
   const response = await ofertasAPI.get(`/anuncio/${anuncioId}`);
   return response.data;
 }
 
-// Listar ofertas feitas por um usuário específico
 async function getOfertasPorUsuario(usuarioId) {
   const response = await ofertasAPI.get(`/usuario/${usuarioId}`);
   return response.data;
 }
 
-// Buscar uma oferta específica por ID
 async function getOfertaById(id) {
   const response = await ofertasAPI.get(`/${id}`);
   return response.data;
 }
 
-// (Opcional) Exemplo para atualizar status de uma oferta, se implementado no backend
-// async function updateOfertaStatus(ofertaId, novoStatus) {
-//   const response = await ofertasAPI.put(`/${ofertaId}/status`, { status: novoStatus });
-//   return response.data;
-// }
+async function getOfertas() {
+  const response = await ofertasAPI.get(""); 
+  return response.data;
+}
 
-// (Opcional) Exemplo para deletar uma oferta
-// async function deleteOferta(id) {
-//   await ofertasAPI.delete(`/${id}`);
-// }
+async function updateOferta(id, dadosOferta) {
+  const response = await ofertasAPI.patch(`/${id}`, dadosOferta); 
+  return response.data;
+}
+
+async function deleteOferta(id) {
+  await ofertasAPI.delete(`/${id}`);
+}
+
+// Novas funções
+async function aceitarOferta(ofertaId) {
+  const response = await ofertasAPI.patch(`/${ofertaId}/aceitar`);
+  return response.data;
+}
+
+async function recusarOferta(ofertaId) {
+  const response = await ofertasAPI.patch(`/${ofertaId}/recusar`);
+  return response.data;
+}
 
 export {
   createOfertaParaAnuncio,
   getOfertasPorAnuncio,
   getOfertasPorUsuario,
-  getOfertaById
-  // updateOfertaStatus, // Descomente se implementar
-  // deleteOferta // Descomente se implementar
+  getOfertaById,
+  getOfertas,
+  updateOferta,
+  deleteOferta,
+  aceitarOferta, // Exportar
+  recusarOferta  // Exportar
 };

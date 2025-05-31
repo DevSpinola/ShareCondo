@@ -1,21 +1,20 @@
-// src/componentes/Admin/AdminLayout.js
-import React, { useEffect, useState } from "react";
+// src/paginas/Admin/AdminLayout.js
+import React, { useEffect } from "react"; // Removido useState se não for usado aqui
 import { Link, Outlet, useNavigate } from 'react-router-dom';
-import './AdminLayout.css'; // Criaremos este CSS
+import './AdminLayout.css';
 
 const AdminLayout = () => {
   const navigate = useNavigate();
   const usuarioLogado = JSON.parse(localStorage.getItem("usuario"));
 
-  // Redireciona se não for admin ou não estiver logado
   useEffect(() => {
     if (!usuarioLogado || usuarioLogado.tipoUsuario !== "ADMIN") {
-      navigate("/"); // Ou para uma página de "acesso negado"
+      navigate("/");
     }
   }, [usuarioLogado, navigate]);
 
   if (!usuarioLogado || usuarioLogado.tipoUsuario !== "ADMIN") {
-    return null; // Ou um loader/mensagem enquanto redireciona
+    return null;
   }
 
   return (
@@ -26,11 +25,12 @@ const AdminLayout = () => {
           <li><Link to="/admin">Painel Principal</Link></li>
           <li><Link to="usuarios">Gerenciar Usuários</Link></li>
           <li><Link to="condominios">Gerenciar Condomínios</Link></li>
-          {/* Adicionar mais links para outras funcionalidades de admin */}
+          <li><Link to="anuncios">Gerenciar Anúncios</Link></li>
+          <li><Link to="ofertas">Gerenciar Ofertas</Link></li>
         </ul>
       </nav>
       <main className="admin-main-content">
-        <Outlet /> {/* Componentes de sub-rota serão renderizados aqui */}
+        <Outlet />
       </main>
     </div>
   );

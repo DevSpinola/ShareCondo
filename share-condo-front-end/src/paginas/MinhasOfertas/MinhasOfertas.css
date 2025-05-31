@@ -1,0 +1,59 @@
+/* src/paginas/MinhasOfertas/MinhasOfertas.css */
+.minhas-ofertas-container {
+  padding: 20px;
+  max-width: 800px;
+  margin: 20px auto;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.minhas-ofertas-container h1 {
+  text-align: center;
+  color: #003366;
+  margin-bottom: 25px;
+}
+
+.lista-minhas-ofertas {
+  list-style-type: none;
+  padding: 0;
+}
+
+.minha-oferta-card {
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+}
+
+.minha-oferta-card p {
+  margin: 6px 0;
+  font-size: 0.95em;
+  color: #333;
+}
+
+.minha-oferta-card strong {
+  color: #004d99; /* Um azul um pouco mais escuro para destaque */
+}
+
+.status-badge {
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 0.85em;
+  font-weight: bold;
+  color: white;
+  text-transform: capitalize;
+}
+
+.status-pendente { background-color: #ffc107; color: #333; /* Amarelo */ }
+.status-aceita { background-color: #28a745; /* Verde */ }
+.status-recusada { background-color: #dc3545; /* Vermelho */ }
+.status-cancelada { background-color: #6c757d; /* Cinza */ }
+
+/* Ajuste para a borda esquerda com base no status (opcional, mas visualmente bom) */
+.minha-oferta-card.status-pendente { border-left: 5px solid #ffc107; }
+.minha-oferta-card.status-aceita { border-left: 5px solid #28a745; }
+.minha-oferta-card.status-recusada { border-left: 5px solid #dc3545; }
+.minha-oferta-card.status-cancelada { border-left: 5px solid #6c757d; }

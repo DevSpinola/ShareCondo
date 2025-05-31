@@ -1,40 +1,72 @@
-// src/componentes/Admin/CondoManagement.js
-import React from 'react';
+// src/paginas/Admin/CondoManagementPage.js
+import React, { useState, useCallback } from 'react';
 import CrudTabela from '../../componentes/CrudTabela';
-import { getCondominioById, getCondominios, deleteCondominio, updateCondominio } from '../../servicos/condominios';
-// Placeholder para serviços de condomínio
+import AddCondoModal from './AddCondoModal'; // Modal para adicionar/editar
+import { getCondominioById, getCondominios, deleteCondominio, updateCondominio, createCondominio } from '../../servicos/condominios';
 
 const CondoManagementPage = () => {
+  const [refreshKey, setRefreshKey] = useState(0); // Para forçar a atualização do CrudTabela
+
   const camposMapCondominios = {
     ID: "id",
     Nome: "nome",
-    Endereço: "endereco", // Adicionado exemplo de campo do backend
-    // Síndico: "sindico", // Removido pois não está no modelo Condominio.java atual
-    // Blocos: "blocos",   // Removido
-    // Unidades: "unidades",// Removido
+    Endereço: "endereco",
+  };
+  
+  const handleDataChange = useCallback(() => {
+    setRefreshKey(prevKey => prevKey + 1);
+  }, []);
+
+
+  // EditModal específico para Condomínios (pode ser o mesmo AddCondoModal com lógica de edição)
+  // Para este exemplo, vamos assumir que AddCondoModal pode lidar com edição se passarmos `itemParaEditar`
+  const EditCondoModal = ({ isOpen, onClose, itemParaEditar, onSalvar }) => {
+    // Se AddCondoModal não lida com edição, você precisaria de um EditCondoModal.
+    // Por simplicidade, reutilizaremos AddCondoModal, adaptando-o ou assumindo que ele pode receber 'initialData'
+    return (
+      <AddCondoModal
+        isOpen={isOpen}
+        onClose={onClose}
+        onAddCondo={onSalvar} // onSalvar do CrudTabela chamará updateById
+        initialData={itemParaEditar} // Passando dados para preencher o formulário para edição
+        isEditMode={!!itemParaEditar} // Para o modal saber se está em modo de edição
+      />
+    );
   };
 
-  // NOTA: O CrudTabela tem um botão "Adicionar Novo" que hardcodedly navega para "/cadastro".
-  // Para "Gerenciamento de Condomínios", você precisará de um formulário/modal
-  // específico para criar condomínios e um botão que chame `createCondominio`.
-  // A tabela abaixo lidará com Listar, Editar, Deletar.
 
   return (
     <div>
       <h2>Gerenciamento de Condomínios</h2>
-      {/* Adicionar aqui um botão e modal para CRIAR condomínios, usando createCondominio do serviço */}
-      {/* Exemplo: <Button onClick={() => setIsCreateModalOpen(true)}>Adicionar Novo Condomínio</Button> */}
-      {/* E um <CreateCondominioModal isOpen={isCreateModalOpen} onClose={...} onCreate={handleCreateCondominio} /> */}
-
       <CrudTabela
         titulo="Condomínios Cadastrados"
         campos_map={camposMapCondominios}
         getById={getCondominioById}
         get={getCondominios}
         deleteById={deleteCondominio}
-        updateById={updateCondominio}
-        // A prop "create" ou um botão externo seria necessário para adicionar novos condomínios
-        // O botão "Adicionar Novo" interno do CrudTabela leva para /cadastro, o que não é ideal aqui.
+        updateById={updateCondominio} // Usado por EditCondoModal
+        createFunction={createCondominio} // Usado por AddCondoModal (via prop onSalvar)
+        createModalComponent={(props) => (
+          <AddCondoModal
+            {...props}
+            onAddCondo={async (data) => {
+              await createCondominio(data);
+              handleDataChange(); // Recarrega os dados da tabela
+              props.onClose(); // Fecha o modal
+            }}
+          />
+        )}
+        editModalComponent={(props) => (
+            <EditCondoModal
+             {...props}
+             onSalvar={async (data) => { // onSalvar aqui é o que o CrudTabela chama
+                await updateCondominio(props.itemParaEditar.id, data);
+                handleDataChange();
+                props.onClose();
+             }}
+            />
+        )}
+        refreshData={refreshKey} // Passa a chave para CrudTabela observar mudanças
       />
     </div>
   );

@@ -2,10 +2,9 @@
 import axios from "axios";
 
 const anunciosAPI = axios.create({
-  baseURL: "http://localhost:8080/anuncios" // Endpoint base para anúncios
+  baseURL: "http://localhost:8080/anuncios"
 });
 
-// Interceptor para adicionar o token JWT às requisições
 anunciosAPI.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) {
@@ -16,40 +15,40 @@ anunciosAPI.interceptors.request.use((config) => {
   return Promise.reject(error);
 });
 
-// Criar um novo anúncio
 async function createAnuncio(dadosAnuncio) {
   const response = await anunciosAPI.post("", dadosAnuncio);
-  return response.data; // Retorna o anúncio criado
+  return response.data;
 }
 
-// Listar todos os anúncios
 async function getAnuncios() {
   const response = await anunciosAPI.get("");
   return response.data;
 }
 
-// Buscar um anúncio específico por ID
+// Novo: Buscar anúncios do usuário logado
+async function getAnunciosDoUsuarioLogado() {
+  const response = await anunciosAPI.get("/meus");
+  return response.data;
+}
+
 async function getAnuncioById(id) {
   const response = await anunciosAPI.get(`/${id}`);
   return response.data;
 }
 
-// Atualizar um anúncio existente
 async function updateAnuncio(id, dadosAnuncio) {
-  // O backend para AnuncioController usa PUT para atualização completa
   const response = await anunciosAPI.put(`/${id}`, dadosAnuncio);
-  return response.data; // Retorna o anúncio atualizado
+  return response.data;
 }
 
-// Deletar um anúncio
 async function deleteAnuncio(id) {
   await anunciosAPI.delete(`/${id}`);
-  // Geralmente não há retorno de dados em um DELETE bem-sucedido
 }
 
 export {
   createAnuncio,
   getAnuncios,
+  getAnunciosDoUsuarioLogado, // Exportar nova função
   getAnuncioById,
   updateAnuncio,
   deleteAnuncio
