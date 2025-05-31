@@ -6,9 +6,6 @@ public record UsuarioDTO(
         String id,
         String nome,
         String email,
-        String telefone,
-        String dataNascimento,
-        String habilidades,
         TipoUsuario tipoUsuario
 ) {
     public UsuarioDTO(Usuario usuario) {
@@ -16,9 +13,6 @@ public record UsuarioDTO(
                 usuario.getId(),
                 usuario.getNome(),
                 usuario.getEmail(),
-                usuario.getTelefone(),
-                usuario.getDataNascimento(),
-                usuario.getHabilidades(),
                 usuario.getTipoUsuario()
         );
     }

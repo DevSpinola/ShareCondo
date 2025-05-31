@@ -18,9 +18,6 @@ public class Usuario implements UserDetails {
     private String nome;
     private String email;
     private String senha;
-    private String telefone;
-    private String dataNascimento;
-    private String habilidades;
     private TipoUsuario tipoUsuario; //admin ou usuario comum
 
     public Usuario() {
@@ -39,9 +36,6 @@ public class Usuario implements UserDetails {
                 "nome='" + nome + '\'' +
                 ", email='" + email + '\'' +
                 ", senha='" + senha + '\'' +
-                ", telefone='" + telefone + '\'' +
-                ", dataNascimento='" + dataNascimento + '\'' +
-                ", habilidades='" + habilidades + '\'' +
                 ", tipoUsuario='" + tipoUsuario + '\'' +
                 '}';
     }
@@ -76,30 +70,6 @@ public class Usuario implements UserDetails {
 
     public void setSenha(String senha) {
         this.senha = senha;
-    }
-
-    public String getTelefone() {
-        return telefone;
-    }
-
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
-    }
-
-    public String getDataNascimento() {
-        return dataNascimento;
-    }
-
-    public void setDataNascimento(String dataNascimento) {
-        this.dataNascimento = dataNascimento;
-    }
-
-    public String getHabilidades() {
-        return habilidades;
-    }
-
-    public void setHabilidades(String habilidades) {
-        this.habilidades = habilidades;
     }
 
     public TipoUsuario getTipoUsuario() {
