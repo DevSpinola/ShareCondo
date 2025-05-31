@@ -1,6 +1,6 @@
 // src/components/Anuncios/AnuncioItem.js
 import React from 'react';
-import Button from '../UI/Button';
+import Button from '../../componentes/Botao/Button';
 import './Anuncio.css'; // Criaremos este CSS
 
 const AnuncioItem = ({ anuncio, onOfferTrade }) => {

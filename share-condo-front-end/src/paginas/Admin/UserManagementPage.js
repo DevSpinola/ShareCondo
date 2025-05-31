@@ -1,6 +1,6 @@
 // src/componentes/Admin/UserManagement.js
 import React from 'react';
-import CrudTabela from '../CrudTabela';
+import CrudTabela from '../../componentes/CrudTabela';
 import { getUsuario, getUsuarios, deleteUsuario, updateUsuario } from "../../servicos/usuarios";
 
 const UserManagement = () => {

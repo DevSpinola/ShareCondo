@@ -1,6 +1,6 @@
 // src/componentes/Admin/CondoManagement.js
 import React from 'react';
-import CrudTabela from '../CrudTabela';
+import CrudTabela from '../../componentes/CrudTabela';
 
 // Placeholder para serviços de condomínio
 const getCondominio = async (id) => {

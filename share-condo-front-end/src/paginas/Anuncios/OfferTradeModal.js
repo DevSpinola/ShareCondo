@@ -1,7 +1,7 @@
 // src/components/Anuncios/OfferTradeModal.js
 import React, { useState } from 'react';
-import Modal from '../UI/Modal';
-import Button from '../UI/Button';
+import Modal from '../../componentes/Modal/Modal';
+import Button from '../../componentes/Botao/Button';
 
 const OfferTradeModal = ({ isOpen, onClose, anuncio, onSendOffer }) => {
   const [offerType, setOfferType] = useState('dinheiro'); // dinheiro, servico, item

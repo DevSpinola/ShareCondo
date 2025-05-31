@@ -1,7 +1,7 @@
 // src/components/Anuncios/AddAnuncioModal.js
 import React, { useState } from 'react';
-import Modal from '../UI/Modal';
-import Button from '../UI/Button';
+import Modal from '../../componentes/Modal/Modal';
+import Button from '../../componentes/Botao/Button';
 // Importe seu FormInput se quiser usá-lo aqui, ou crie inputs simples
 // import FormInput from '../FormInput';
 

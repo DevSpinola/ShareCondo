@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Formulario from "../componentes/Formulario";
-import Corpo from "../componentes/Corpo";
-import { cadastro, login } from "../servicos/auth";
+import Formulario from "../../componentes/Formulario";
+import Corpo from "../../componentes/Corpo";
+import { cadastro, login } from "../../servicos/auth";
 
 const camposCadastro = [
   { name: "email", label: "Email", type: "email", required: true },

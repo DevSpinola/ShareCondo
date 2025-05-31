@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import AnuncioList from './AnuncioList';
 import AddAnuncioModal from './AddAnuncioModal';
 import OfferTradeModal from './OfferTradeModal';
-import Button from '../UI/Button';
+import Button from '../../componentes/Botao/Button';
 import './Anuncio.css'; // Para estilização da página de anúncios
 // import axios from 'axios'; // Descomente quando for integrar com API
 

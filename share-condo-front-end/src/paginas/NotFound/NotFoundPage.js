@@ -1,5 +1,5 @@
-import Secao from "../componentes/Secao";
-import Corpo from "../componentes/Corpo";
+import Secao from "../../componentes/Secao/Secao";
+import Corpo from "../../componentes/Corpo";
 
 const naoEncontrada = () => {
   return (   
