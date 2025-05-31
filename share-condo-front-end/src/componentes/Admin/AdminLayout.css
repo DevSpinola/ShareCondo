@@ -1,0 +1,51 @@
+/* src/componentes/Admin/AdminLayout.css */
+.admin-container {
+  display: flex;
+  min-height: calc(100vh - 120px); /* Altura total menos cabeçalho e rodapé (ajuste conforme necessário) */
+}
+
+.admin-sidebar {
+  width: 220px;
+  background-color: #f0f2f5;
+  padding: 20px;
+  border-right: 1px solid #d9d9d9;
+}
+
+.admin-sidebar h2 {
+  font-size: 1.5em;
+  color: #003366; /* Cor do Cabecalho.css */
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.admin-sidebar ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.admin-sidebar ul li {
+  margin-bottom: 10px;
+}
+
+.admin-sidebar ul li a {
+  text-decoration: none;
+  color: #333;
+  font-size: 1.1em;
+  display: block;
+  padding: 8px 10px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.admin-sidebar ul li a:hover,
+.admin-sidebar ul li a.active { /* Estilo para link ativo pode ser adicionado com NavLink */
+  background-color: #0056b3; /* Cor do botão no Cabecalho.css */
+  color: white;
+}
+
+.admin-main-content {
+  flex-grow: 1;
+  padding: 25px;
+  background-color: #ffffff;
+}

@@ -1,3 +1,4 @@
+// src/componentes/Cabecalho/index.js
 import React, { useEffect, useState } from "react";
 import "./Cabecalho.css";
 import { Link, useNavigate } from "react-router-dom";
@@ -7,9 +8,9 @@ const Cabecalho = ({ login_link, register_link }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const usuarioLogado = localStorage.getItem("usuario");
-    if (usuarioLogado) {
-      setUsuario(JSON.parse(usuarioLogado));      
+    const usuarioArmazenado = localStorage.getItem("usuario"); // Renomeado para evitar conflito de nome
+    if (usuarioArmazenado) {
+      setUsuario(JSON.parse(usuarioArmazenado));
     }
   }, []);
 
@@ -25,41 +26,40 @@ const Cabecalho = ({ login_link, register_link }) => {
       <div className="header-content">
         <div className="left-group">
           <img
-            src="imagens/logo.png"
+            src="/imagens/logo.png" // Corrigido para caminho relativo à pasta public
             alt="ShareCondo Logo"
             className="share-condo-logo"
           />
           <ul className="nav-menu">
             <li>
-              <a href="/">Home</a>
+              <Link to="/">Home</Link> {/* Alterado de <a> para <Link> */}
             </li>
             <li>
-              <a href="/quem-somos">Quem somos</a>
+              <Link to="/quem-somos">Quem somos</Link> {/* Alterado de <a> para <Link> */}
             </li>
+            {/* Aba Anúncios adicionada aqui para usuários logados */}
+            {usuario && (
+              <li>
+                <Link to="/anuncios">Anúncios</Link>
+              </li>
+            )}
           </ul>
         </div>
         <div className="right-group">
           {usuario ? (
-            usuario.tipoUsuario === "ADMIN" ? (
-              <>
-                <ul className="nav-menu">
+            <> {/* Fragmento para agrupar elementos do usuário logado */}
+              {usuario.tipoUsuario === "ADMIN" && (
+                <ul className="nav-menu" style={{ marginRight: '10px' }}> {/* Adicionado um estilo para espaçamento */}
                   <li>
                     <Link to="/admin">Console Admin</Link>
                   </li>
                 </ul>
-                <span className="username">Olá, {usuario.nome} (ADMIN)</span>
-                <button onClick={handleLogout} className="logout-btn">
-                  Sair
-                </button>
-              </>
-            ) : (
-              <>
-                <span className="username">Olá, {usuario.nome}</span>
-                <button onClick={handleLogout} className="logout-btn">
-                  Sair
-                </button>
-              </>
-            )
+              )}
+              <span className="username">Olá, {usuario.nome}{usuario.tipoUsuario === "ADMIN" ? " (ADMIN)" : ""}</span>
+              <button onClick={handleLogout} className="logout-btn">
+                Sair
+              </button>
+            </>
           ) : (
             <>
               <Link to={register_link} className="signup-btn">
