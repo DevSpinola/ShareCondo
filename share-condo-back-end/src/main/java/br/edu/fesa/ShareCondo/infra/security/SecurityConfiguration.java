@@ -25,13 +25,39 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> {})
+                .cors(cors -> {}) // Certifique-se que sua CorsConfig está funcionando
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.GET).permitAll()
+                        // Autenticação
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/classificados").hasRole("ADMIN").anyRequest().authenticated())
+
+                        // Usuários (CRUD - exemplo, pode precisar de mais granularidade)
+                        .requestMatchers(HttpMethod.GET, "/usuario/**").authenticated() // Permitir buscar usuários se autenticado
+                        .requestMatchers(HttpMethod.PUT, "/usuario/**").authenticated() // Permitir atualizar usuário se autenticado
+                        .requestMatchers(HttpMethod.PATCH, "/usuario/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/usuario/**").hasRole("ADMIN") // Só admin deleta usuário
+
+                        // Condomínios (Exemplo: ADMIN gerencia, usuários podem listar/ver)
+                        .requestMatchers(HttpMethod.POST, "/condominio").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/condominio/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/condominio/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/condominio/**").permitAll() // Permitir listagem para todos
+
+                        // Anúncios
+                        .requestMatchers(HttpMethod.POST, "/anuncios").authenticated() // Usuários autenticados podem criar
+                        .requestMatchers(HttpMethod.PUT, "/anuncios/**").authenticated() // Edição/deleção controlada no controller
+                        .requestMatchers(HttpMethod.DELETE, "/anuncios/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/anuncios/**").permitAll() // Permitir visualização para todos
+
+                        // Ofertas
+                        .requestMatchers(HttpMethod.POST, "/ofertas/**").authenticated() // Usuários autenticados podem fazer ofertas
+                        .requestMatchers(HttpMethod.PUT, "/ofertas/**").authenticated() // Atualização de status, etc.
+                        .requestMatchers(HttpMethod.GET, "/ofertas/**").authenticated() // Ver ofertas
+
+                        // .requestMatchers(HttpMethod.POST, "/classificados").hasRole("ADMIN") // Regra anterior, ajuste se "classificados" for "anuncios"
+                        .anyRequest().authenticated() // Qualquer outra requisição precisa de autenticação
+                )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
