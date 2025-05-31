@@ -12,9 +12,11 @@ const OfferTradeModal = ({ isOpen, onClose, anuncio, onSendOffer }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    let offerData = {
-      anuncioId: anuncio.id,
-      tipoOferta: offerType,
+    // O anuncio.id já está disponível via prop 'anuncio'
+    // O AnunciosPage.js (ou quem chama onSendOffer) cuidará de passar o anuncioId para o serviço.
+    let offerDataPayload = {
+      tipoOferta: offerType, // Será convertido para ENUM no AnunciosPage
+      // Os campos 'valor' e 'descricao' serão usados condicionalmente
     };
 
     if (offerType === 'dinheiro') {
@@ -22,16 +24,20 @@ const OfferTradeModal = ({ isOpen, onClose, anuncio, onSendOffer }) => {
         alert('Por favor, insira um valor monetário válido.');
         return;
       }
-      offerData.valor = parseFloat(offerAmount);
-    } else {
+      offerDataPayload.valor = parseFloat(offerAmount);
+    } else { // item ou servico
       if (!offerDetails.trim()) {
         alert(`Por favor, forneça detalhes para a oferta de ${offerType}.`);
         return;
       }
-      offerData.descricao = offerDetails;
+      offerDataPayload.descricao = offerDetails;
     }
 
-    onSendOffer(offerData);
+    // onSendOffer agora é chamado com os dados da oferta
+    // e o AnunciosPage.js usará o 'anuncio.id' (currentAnuncioForOffer.id)
+    onSendOffer(offerDataPayload); 
+    
+    // Limpar formulário e fechar modal
     setOfferType('dinheiro');
     setOfferDetails('');
     setOfferAmount('');

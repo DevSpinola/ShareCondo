@@ -2,8 +2,7 @@
 import React, { useState } from 'react';
 import Modal from '../../componentes/Modal/Modal';
 import Button from '../../componentes/Botao/Button';
-// Importe seu FormInput se quiser usá-lo aqui, ou crie inputs simples
-// import FormInput from '../FormInput';
+
 
 const AddAnuncioModal = ({ isOpen, onClose, onAddAnuncio }) => {
   const [titulo, setTitulo] = useState('');
@@ -16,8 +15,12 @@ const AddAnuncioModal = ({ isOpen, onClose, onAddAnuncio }) => {
       alert('Por favor, preencha o título e a descrição.');
       return;
     }
-    // Em um app real, você teria mais validações e talvez um ID gerado pelo backend
-    onAddAnuncio({ id: Date.now(), titulo, descricao, tipo, usuario: 'Usuário Logado' }); // Adicionar info do usuário logado
+    // O AnunciosPage.js (ou quem chama onAddAnuncio)
+    // será responsável por formar o payload final para a API.
+    // Não precisamos mais de id ou usuario aqui.
+    onAddAnuncio({ titulo, descricao, tipo }); 
+    
+    // Limpar formulário e fechar modal
     setTitulo('');
     setDescricao('');
     setTipo('item');
