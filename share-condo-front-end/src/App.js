@@ -7,16 +7,13 @@ import HomePage from './paginas/Home/HomePage';
 import LoginPage from "./paginas/Login/LoginPage";
 import CadastroPage from "./paginas/Cadastro/CadastroPage";
 import AnunciosPage from './paginas/Anuncios/AnunciosPage';
-import MeusAnunciosPage from './paginas/MeusAnuncios/MeusAnunciosPage'; // Novo
-import MinhasOfertasPage from './paginas/MinhasOfertas/MinhasOfertasPage'; // Novo
+import MeusAnunciosPage from './paginas/MeusAnuncios/MeusAnunciosPage';
+import MinhasOfertasPage from './paginas/MinhasOfertas/MinhasOfertasPage';
 import NotFoundPage from "./paginas/NotFound/NotFoundPage";
+import AnuncioDetalhePage from './paginas/AnuncioDetalhe/AnuncioDetalhePage'; // <-- ADICIONAR IMPORTAÇÃO
 
 // Páginas de Admin
-import AdminDashboardPage from './paginas/Admin/AdminDashboardPage';
-import UserManagementPage from './paginas/Admin/UserManagementPage';
-import CondoManagementPage from './paginas/Admin/CondoManagementPage';
-import AnuncioManagementPage from './paginas/Admin/AnuncioManagementPage'; 
-import OfertaManagementPage from './paginas/Admin/OfertaManagementPage';   
+// ... (imports de admin)
 
 // Componentes de Layout
 import Cabecalho from "./componentes/Cabecalho";
@@ -36,16 +33,13 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           
           <Route path="/admin" element={<AdminLayout />}>
-            <Route index element={<AdminDashboardPage />} />
-            <Route path="usuarios" element={<UserManagementPage />} />
-            <Route path="condominios" element={<CondoManagementPage />} />
-            <Route path="anuncios" element={<AnuncioManagementPage />} /> 
-            <Route path="ofertas" element={<OfertaManagementPage />} />  
+            {/* ... (rotas de admin) ... */}
           </Route>
 
           <Route path="/anuncios" element={<AnunciosPage />} />
-          <Route path="/meus-anuncios" element={<MeusAnunciosPage />} /> {/* Nova rota */}
-          <Route path="/minhas-ofertas" element={<MinhasOfertasPage />} /> {/* Nova rota */}
+          <Route path="/anuncios/:id" element={<AnuncioDetalhePage />} /> {/* <-- ADICIONAR NOVA ROTA */}
+          <Route path="/meus-anuncios" element={<MeusAnunciosPage />} />
+          <Route path="/minhas-ofertas" element={<MinhasOfertasPage />} />
           
           <Route path="/*" element={<NotFoundPage />} />
         </Routes>

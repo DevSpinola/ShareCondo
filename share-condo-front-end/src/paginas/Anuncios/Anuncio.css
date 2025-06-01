@@ -123,3 +123,26 @@
   color: #dc3545 !important;
   font-weight: 500;
 }
+
+.anuncio-card-link-titulo {
+  text-decoration: none;
+  color: inherit; /* Herda a cor do h3 */
+}
+
+.anuncio-card-link-titulo:hover h3 {
+  color: #007bff; /* Muda a cor do título no hover do link */
+}
+
+.anuncio-card-actions {
+  display: flex;
+  justify-content: flex-start; /* Alinha os botões à esquerda */
+  align-items: center;
+  margin-top: 15px;
+}
+
+.anuncio-card-actions .custom-button {
+  margin-right: 8px; /* Espaço entre botões */
+}
+.anuncio-card-actions .custom-button:last-child {
+  margin-right: 0;
+}
