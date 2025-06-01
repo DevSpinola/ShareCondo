@@ -107,6 +107,19 @@ const AnunciosPage = () => {
 
   // Filtrar anúncios ativos para exibição
   const anunciosAtivos = anuncios.filter(anuncio => anuncio.ativo);
+  
+  // Mensagem sobre o escopo dos anúncios
+  let escopoAnunciosMensagem = "";
+  if (usuarioLogado) {
+    if (usuarioLogado.tipoUsuario === "ADMIN") {
+      escopoAnunciosMensagem = "Você está visualizando anúncios de todos os condomínios (Visão de Administrador).";
+    } else if (usuarioLogado.condominioNome) {
+      escopoAnunciosMensagem = `Você está visualizando anúncios do condomínio: ${usuarioLogado.condominioNome}.`;
+    } else {
+      escopoAnunciosMensagem = "Você não está associado a um condomínio específico. Anúncios podem ser limitados.";
+    }
+  }
+
 
   return (
     <div className="anuncios-page-container">
@@ -118,6 +131,13 @@ const AnunciosPage = () => {
           </Button>
         )}
       </div>
+
+      {/* Mensagem de escopo dos anúncios */}
+      {usuarioLogado && escopoAnunciosMensagem && (
+        <p style={{ textAlign: 'center', marginBottom: '15px', fontStyle: 'italic', color: '#555' }}>
+          {escopoAnunciosMensagem}
+        </p>
+      )}
 
       {feedbackMessage.text && (
         <p className={`feedback-message ${feedbackMessage.type}`}>
