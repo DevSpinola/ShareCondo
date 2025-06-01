@@ -4,6 +4,7 @@ import br.edu.fesa.ShareCondo.model.*; // Importa todos os modelos necessários
 import br.edu.fesa.ShareCondo.repositories.CondominioRepository; // IMPORTAR
 import br.edu.fesa.ShareCondo.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -149,22 +151,35 @@ public class UsuarioController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUsuarioById(@PathVariable String id) {
+    public ResponseEntity<?> deleteUsuarioById(@PathVariable String id) { // Alterado para ResponseEntity<?>
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (!(authentication.getPrincipal() instanceof Usuario)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            // Retornar um corpo JSON para consistência
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("erro", "Usuário não autenticado."));
         }
         Usuario usuarioLogado = (Usuario) authentication.getPrincipal();
 
         if (usuarioLogado.getTipoUsuario() != TipoUsuario.ADMIN) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("erro", "Apenas administradores podem excluir usuários."));
         }
 
-        if (usuarioRepository.existsById(id)) {
+        if (!usuarioRepository.existsById(id)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("erro", "Usuário com ID " + id + " não encontrado."));
+        }
+
+        try {
             usuarioRepository.deleteById(id);
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.noContent().build(); // 204 No Content em caso de sucesso
+        } catch (DataIntegrityViolationException e) {
+            // Logar o erro no backend para depuração
+            System.err.println("Falha ao excluir usuário ID " + id + " devido à violação de integridade de dados: " + e.getMessage());
+            // Retornar uma mensagem clara para o frontend
+            return ResponseEntity.status(HttpStatus.CONFLICT) // 409 Conflict é apropriado
+                    .body(Map.of("erro", "Não é possível excluir o usuário. Existem dados associados a ele (ex: anúncios, ofertas). Por favor, remova ou reatribua esses dados primeiro."));
+        } catch (Exception e) { // Captura outras exceções inesperadas
+            System.err.println("Erro inesperado ao tentar excluir usuário ID " + id + ": " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("erro", "Ocorreu um erro inesperado no servidor ao tentar excluir o usuário."));
         }
     }
 

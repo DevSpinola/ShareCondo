@@ -41,22 +41,43 @@ const CrudTabela = ({
     carregarDados();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [get, refreshData]); // Adicionado refreshData como dependência
-
-  const handleExcluir = async (id) => {
+const handleExcluir = async (id) => {
     const confirmar = window.confirm(
       "Tem certeza que deseja excluir este item?"
     );
     if (!confirmar) return;
 
+    setSucesso(""); // Limpa mensagem de sucesso anterior
+    setErro("");    // Limpa mensagem de erro anterior
+
     try {
-      await deleteById(id);
+      await deleteById(id); // Chama o serviço de exclusão (ex: deleteUsuario(id))
       setSucesso("Item excluído com sucesso!");
-      setErro("");
-      carregarDados(); // Recarrega os dados
+      carregarDados(); // Recarrega os dados após a exclusão
     } catch (err) {
       console.error("Erro ao excluir item:", err);
-      setErro("Erro ao excluir item: " + (err.response?.data?.message || err.message));
-      setSucesso("");
+      let errorMessage = "Erro desconhecido ao tentar excluir o item."; // Mensagem padrão
+
+      if (err.response && err.response.data) {
+        if (typeof err.response.data.erro === 'string') {
+          // Prioriza a mensagem da chave "erro" no JSON de resposta
+          errorMessage = err.response.data.erro;
+        } else if (typeof err.response.data.message === 'string') {
+          // Fallback para uma chave "message"
+          errorMessage = err.response.data.message;
+        } else if (typeof err.response.data === 'string' && err.response.data.trim() !== '') {
+          // Fallback se a resposta for uma string simples
+          errorMessage = err.response.data;
+        } else if (err.response.statusText) {
+            errorMessage = `Erro ${err.response.status}: ${err.response.statusText}`;
+        }
+      } else if (err.message) {
+        // Fallback para a mensagem do objeto de erro do JavaScript
+        errorMessage = err.message;
+      }
+      
+      setErro(`Falha ao excluir: ${errorMessage}`);
+      setSucesso(""); // Garante que não haja mensagem de sucesso em caso de erro
     }
   };
 
