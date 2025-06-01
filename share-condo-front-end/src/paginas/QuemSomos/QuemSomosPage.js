@@ -23,7 +23,7 @@ const QuemSomosPage = () => {
             necessidades e gentilezas que nossos vizinhos têm a oferecer.
           </p>
           <p>
-            Assim, em [Ano de Fundação Fictício, ex: 2023], um grupo de entusiastas da tecnologia e da vida em comunidade
+            Assim, em 2025, um grupo de entusiastas da tecnologia e da vida em comunidade
             uniu forças para criar uma plataforma que facilitasse essas conexões. Queríamos um espaço onde
             a troca de um item esquecido, a ajuda para um pequeno reparo ou o compartilhamento de um hobby
             pudessem acontecer de forma simples, segura e, acima de tudo, amigável.
