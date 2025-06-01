@@ -1,0 +1,43 @@
+/* src/paginas/Admin/AdminDashboardPage.css */
+.admin-dashboard {
+  padding: 20px;
+  text-align: left; /* Ou center, dependendo do visual desejado */
+}
+
+.admin-dashboard h1 {
+  color: #003366;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.admin-dashboard-image {
+  display: block;
+  margin: 0 auto 20px auto; /* Centraliza a imagem e adiciona margem inferior */
+  max-width: 250px; /* Ajuste conforme necessário, pode ser maior */
+  height: auto;
+  border-radius: 8px; /* Bordas arredondadas suaves */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+}
+
+.admin-dashboard p {
+  font-size: 1.1em;
+  line-height: 1.6;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.admin-dashboard ul {
+  list-style-type: disc; /* Estilo de lista padrão */
+  padding-left: 30px;   /* Indentação para os itens da lista */
+  margin-bottom: 20px;
+}
+
+.admin-dashboard ul li {
+  margin-bottom: 10px;
+  font-size: 1.05em;
+  color: #444;
+}
+
+.admin-dashboard ul li strong {
+  color: #0056b3; /* Destaque para os títulos dos itens */
+}
