@@ -57,7 +57,6 @@ public class AnuncioController {
         novoAnuncio.setDescricao(anuncioRequestDTO.descricao());
         novoAnuncio.setTipoAnuncio(anuncioRequestDTO.tipoAnuncio());
         novoAnuncio.setAnunciante(anunciante);
-        // O condomínio do anúncio é implicitamente o do anunciante
         novoAnuncio.setDataCriacao(LocalDateTime.now());
         novoAnuncio.setAtivo(anuncioRequestDTO.ativo() != null ? anuncioRequestDTO.ativo() : true);
 
@@ -84,7 +83,7 @@ public class AnuncioController {
             anunciosFiltrados = anuncioRepository.findAll();
         } else {
             if (usuarioLogado.getCondominio() == null) {
-                return ResponseEntity.ok(List.of()); // Usuário sem condomínio não vê anúncios (exceto admin)
+                return ResponseEntity.ok(List.of());
             }
             String condominioIdDoUsuario = usuarioLogado.getCondominio().getId();
             anunciosFiltrados = anuncioRepository.findAll().stream()
@@ -100,11 +99,9 @@ public class AnuncioController {
         return ResponseEntity.ok(dtos);
     }
 
-    // ... (demais métodos como /meus, /{id}, PUT, DELETE precisam de ajustes similares para permissões e validação de condomínio/status)
-    // Exemplo para GET /{id}:
     @GetMapping("/{id}")
     @Transactional(readOnly = true)
-    public ResponseEntity<?> buscarAnuncioPorId(@PathVariable String id) { // Alterado para ResponseEntity<?>
+    public ResponseEntity<?> buscarAnuncioPorId(@PathVariable String id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Usuario usuarioLogado = (Usuario) usuarioRepository.findByEmail(authentication.getName());
 
@@ -117,8 +114,6 @@ public class AnuncioController {
 
         return anuncioRepository.findById(id)
                 .map(anuncio -> {
-                    // ADMIN pode ver qualquer anúncio.
-                    // Outros usuários (USUARIO, SINDICO) só podem ver se for do seu condomínio.
                     if (usuarioLogado.getTipoUsuario() != TipoUsuario.ADMIN) {
                         if (anuncio.getAnunciante() == null || anuncio.getAnunciante().getCondominio() == null ||
                                 usuarioLogado.getCondominio() == null ||
@@ -143,30 +138,52 @@ public class AnuncioController {
 
         return anuncioRepository.findById(id)
                 .map(anuncioExistente -> {
-                    // Verifica se o usuário logado é o anunciante OU é um ADMIN
-                    if (!anuncioExistente.getAnunciante().getId().equals(usuarioLogado.getId()) &&
-                            usuarioLogado.getTipoUsuario() != TipoUsuario.ADMIN) {
+                    boolean isOwner = anuncioExistente.getAnunciante().getId().equals(usuarioLogado.getId());
+                    boolean isAdmin = usuarioLogado.getTipoUsuario() == TipoUsuario.ADMIN;
+                    boolean isSindicoDoCondominio = false;
+                    if (usuarioLogado.getTipoUsuario() == TipoUsuario.SINDICO &&
+                            anuncioExistente.getAnunciante().getCondominio() != null &&
+                            usuarioLogado.getCondominio() != null &&
+                            anuncioExistente.getAnunciante().getCondominio().getId().equals(usuarioLogado.getCondominio().getId())) {
+                        isSindicoDoCondominio = true;
+                    }
+
+                    if (!isOwner && !isAdmin && !isSindicoDoCondominio) {
                         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Usuário não autorizado a modificar este anúncio.");
                     }
 
-                    // Se o usuário estiver tentando ATIVAR um anúncio e for um USUARIO normal, verificar o limite
-                    if (usuarioLogado.getTipoUsuario() == TipoUsuario.USUARIO &&
+                    // Se for apenas uma desativação por um síndico que não é o dono, só permitir alterar 'ativo'
+                    if (isSindicoDoCondominio && !isOwner && anuncioRequestDTO.ativo() != null && !anuncioRequestDTO.ativo()) {
+                        if (anuncioRequestDTO.titulo() != null && !anuncioRequestDTO.titulo().equals(anuncioExistente.getTitulo()) ||
+                                anuncioRequestDTO.descricao() != null && !anuncioRequestDTO.descricao().equals(anuncioExistente.getDescricao()) ||
+                                anuncioRequestDTO.tipoAnuncio() != null && !anuncioRequestDTO.tipoAnuncio().equals(anuncioExistente.getTipoAnuncio())) {
+                            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Síndico pode apenas desativar anúncios de seu condomínio, não alterar outros dados.");
+                        }
+                    }
+
+
+                    // Se o usuário (não admin/síndico) estiver tentando ATIVAR um anúncio, verificar o limite
+                    if (usuarioLogado.getTipoUsuario() == TipoUsuario.USUARIO && isOwner &&
                             Boolean.TRUE.equals(anuncioRequestDTO.ativo()) && !anuncioExistente.isAtivo()) {
                         long activeAnnouncementsCount = anuncioRepository.countByAnuncianteIdAndAtivo(usuarioLogado.getId(), true);
                         if (activeAnnouncementsCount >= MAX_ACTIVE_ANNOUNCEMENTS_PER_USER) {
                             return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                                    .body("Você atingiu o limite máximo de " + MAX_ACTIVE_ANNOUNCEMENTS_PER_USER + " anúncios ativos. Não é possível ativar este anúncio.");
+                                    .body("Você atingiu o limite máximo de " + MAX_ACTIVE_ANNOUNCEMENTS_PER_USER + " anúncios ativos. Não é possível reativar este anúncio.");
                         }
                     }
 
-                    anuncioExistente.setTitulo(anuncioRequestDTO.titulo());
-                    anuncioExistente.setDescricao(anuncioRequestDTO.descricao());
-                    anuncioExistente.setTipoAnuncio(anuncioRequestDTO.tipoAnuncio());
+                    // Apenas owner e admin podem mudar todos os campos. Síndico pode mudar 'ativo'.
+                    if (isOwner || isAdmin) {
+                        anuncioExistente.setTitulo(anuncioRequestDTO.titulo());
+                        anuncioExistente.setDescricao(anuncioRequestDTO.descricao());
+                        anuncioExistente.setTipoAnuncio(anuncioRequestDTO.tipoAnuncio());
+                    }
+
                     if (anuncioRequestDTO.ativo() != null) {
+                        // Dono, Admin ou Sindico do mesmo condomínio podem alterar o status 'ativo'
                         anuncioExistente.setAtivo(anuncioRequestDTO.ativo());
                     }
-                    // O condomínio do anúncio permanece o do anunciante original.
-                    // Se um admin puder mudar o anunciante, o condomínio também deveria ser reavaliado.
+
 
                     Anuncio anuncioSalvo = anuncioRepository.save(anuncioExistente);
                     return ResponseEntity.ok(new AnuncioResponseDTO(anuncioSalvo));
@@ -188,8 +205,17 @@ public class AnuncioController {
 
         return anuncioRepository.findById(id)
                 .map(anuncio -> {
-                    if (!anuncio.getAnunciante().getId().equals(usuarioLogado.getId()) &&
-                            usuarioLogado.getTipoUsuario() != TipoUsuario.ADMIN) {
+                    boolean isOwner = anuncio.getAnunciante().getId().equals(usuarioLogado.getId());
+                    boolean isAdmin = usuarioLogado.getTipoUsuario() == TipoUsuario.ADMIN;
+                    boolean isSindicoDoCondominio = false;
+                    if (usuarioLogado.getTipoUsuario() == TipoUsuario.SINDICO &&
+                            anuncio.getAnunciante().getCondominio() != null &&
+                            usuarioLogado.getCondominio() != null &&
+                            anuncio.getAnunciante().getCondominio().getId().equals(usuarioLogado.getCondominio().getId())) {
+                        isSindicoDoCondominio = true;
+                    }
+
+                    if (!isOwner && !isAdmin && !isSindicoDoCondominio) {
                         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Usuário não autorizado a deletar este anúncio.");
                     }
                     anuncioRepository.deleteById(id);

@@ -126,3 +126,33 @@
 .oferta-item.status-aceita { border-left: 5px solid #28a745; background-color: #e6ffed; }
 .oferta-item.status-recusada { border-left: 5px solid #dc3545; background-color: #ffebee; }
 .oferta-item.status-cancelada { border-left: 5px solid #6c757d; background-color: #f8f9fa;}
+
+.meu-anuncio-header {
+  display: flex; /* Adicionado para alinhar o botão de desativar */
+  justify-content: space-between; /* Adicionado para alinhar o botão de desativar */
+  align-items: flex-start; /* Adicionado para alinhar o botão de desativar */
+  margin-bottom: 10px; /* Ajustado para consistência */
+}
+
+.meu-anuncio-header h3 {
+  margin-top: 0;
+  color: #0056b3;
+  font-size: 1.4em;
+  margin-bottom: 5px;
+  margin-right: 10px; /* Espaço para o botão */
+}
+.meu-anuncio-header p {
+    font-size: 0.9em;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.button-deactivate {
+  background-color: #ffc107 !important; /* Amarelo para atenção */
+  color: #333 !important;
+  border-color: #ffc107 !important;
+}
+.button-deactivate:hover {
+    background-color: #e0a800 !important;
+    border-color: #d39e00 !important;
+}
