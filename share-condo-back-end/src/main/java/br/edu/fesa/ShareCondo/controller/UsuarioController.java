@@ -163,6 +163,10 @@ public class UsuarioController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("erro", "Apenas administradores podem excluir usuários."));
         }
 
+        if (usuarioLogado.getId().equals(id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("erro", "Administradores não podem se auto-excluir."));
+        }
+        
         if (!usuarioRepository.existsById(id)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("erro", "Usuário com ID " + id + " não encontrado."));
         }
