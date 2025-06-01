@@ -5,35 +5,42 @@ import FormInput from '../../componentes/FormInput';
 import Button from '../../componentes/Botao/Button';
 import './AdminModal.css';
 
-// Adicionada prop onSuccess para notificar a página pai
-const EditUserModal = ({ isOpen, onClose, onSave, usuarioExistente, condominiosDisponiveis, onSuccess }) => {
-    const [formData, setFormData] = useState({
+// Mude 'onSave' para 'onSalvar' na desestruturação das props
+const EditUserModal = ({ isOpen, onClose, onSalvar, usuarioExistente, condominiosDisponiveis, onSuccess }) => {
+    // Log para confirmar a prop recebida
+    console.log('[EditUserModal] Prop onSalvar recebida:', onSalvar, 'Tipo:', typeof onSalvar);
+
+    const initialFormState = { // Definido para clareza e reset
         nome: '',
         email: '',
         tipoUsuario: 'USUARIO',
         statusUsuario: 'PENDENTE_APROVACAO',
         condominioId: '',
         senha: '',
-    });
+    };
+    const [formData, setFormData] = useState(initialFormState);
     const [modalError, setModalError] = useState('');
 
     useEffect(() => {
-        if (usuarioExistente) {
-            setFormData({
+        console.log('[EditUserModal useEffect] Disparado. usuarioExistente:', usuarioExistente, 'isOpen:', isOpen);
+        if (isOpen && usuarioExistente) {
+            const newFormData = {
                 nome: usuarioExistente.nome || '',
                 email: usuarioExistente.email || '',
                 tipoUsuario: usuarioExistente.tipoUsuario || 'USUARIO',
                 statusUsuario: usuarioExistente.statusUsuario || 'PENDENTE_APROVACAO',
-                condominioId: usuarioExistente.condominioId || '', // UsuarioDTO já deve ter condominioId
+                condominioId: usuarioExistente.condominioId || '',
                 senha: '',
-            });
-        } else {
-            setFormData({
-                nome: '', email: '', tipoUsuario: 'USUARIO', 
-                statusUsuario: 'PENDENTE_APROVACAO', condominioId: '', senha: ''
-            });
+            };
+            console.log('[EditUserModal useEffect] Populating formData with:', newFormData);
+            setFormData(newFormData);
+        } else if (isOpen && !usuarioExistente) {
+            console.log('[EditUserModal useEffect] Resetando formData para defaults pois não há usuarioExistente ou o modal apenas abriu.');
+            setFormData(initialFormState);
         }
-        setModalError('');
+        if (isOpen) {
+            setModalError('');
+        }
     }, [usuarioExistente, isOpen]);
 
     const handleChange = (e) => {
@@ -41,7 +48,7 @@ const EditUserModal = ({ isOpen, onClose, onSave, usuarioExistente, condominiosD
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = async (e) => { // Tornar async para poder usar await em onSave se necessário
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setModalError('');
 
@@ -49,7 +56,6 @@ const EditUserModal = ({ isOpen, onClose, onSave, usuarioExistente, condominiosD
             setModalError('Nome e Email são obrigatórios.');
             return;
         }
-        // Usuários e Síndicos (não ADMIN) devem ter um condomínio (a menos que o admin possa desvincular com condominioId = "")
         if ((formData.tipoUsuario === 'USUARIO' || formData.tipoUsuario === 'SINDICO') && !formData.condominioId) {
             setModalError('Usuários e Síndicos devem estar associados a um condomínio.');
             return;
@@ -57,24 +63,22 @@ const EditUserModal = ({ isOpen, onClose, onSave, usuarioExistente, condominiosD
         
         const dadosParaSalvar = { ...formData };
         if (!dadosParaSalvar.senha || dadosParaSalvar.senha.trim() === "") {
-            delete dadosParaSalvar.senha; // Não enviar campo senha se vazio
+            delete dadosParaSalvar.senha;
         }
 
-        try {
-            // onSave é a função handleSalvarEdicao do CrudTabela, que chama updateById
-            await onSave(dadosParaSalvar); 
-            // onSuccess é o handleDataChange da UserManagementPage, chamado pelo CrudTabela ao ter sucesso no updateById.
-            // O CrudTabela já deve recarregar os dados ao chamar seu próprio onSave.
-            // Se quisermos fechar o modal aqui após o sucesso, o onSave não deve fechar automaticamente.
-            // Por ora, o fechamento é responsabilidade do CrudTabela ou da UserManagementPage que controla 'isOpen'.
-            // A prop 'onSuccess' aqui pode não ser estritamente necessária se o CrudTabela já atualiza.
-            if(onSuccess) onSuccess(); // Chama o refresh da UserManagementPage, se passado.
-            onClose(); // Fechar o modal após salvar.
-        } catch (error) {
-            // O erro já deve ser tratado e exibido pela UserManagementPage ou CrudTabela
-            // mas podemos ter um feedback local também se a prop onSave não tratar.
-            console.error("Erro ao salvar no modal:", error);
-            setModalError(error.response?.data?.message || error.message || "Erro ao salvar alterações.");
+        // Verifique se onSalvar é uma função antes de chamar
+        if (typeof onSalvar === 'function') {
+            try {
+                await onSalvar(dadosParaSalvar); // Agora chama onSalvar (com 'a' minúsculo)
+                if(onSuccess) onSuccess(); 
+                onClose(); 
+            } catch (error) {
+                console.error("Erro ao salvar no modal:", error);
+                setModalError(error.response?.data?.message || error.message || "Erro ao salvar alterações.");
+            }
+        } else {
+            console.error('[EditUserModal handleSubmit] Erro: onSalvar não é uma função. Valor recebido:', onSalvar);
+            setModalError('Erro interno: A função de salvar não foi configurada corretamente.');
         }
     };
 
@@ -91,10 +95,9 @@ const EditUserModal = ({ isOpen, onClose, onSave, usuarioExistente, condominiosD
     ];
 
     const condominiosOptions = Array.isArray(condominiosDisponiveis) ? condominiosDisponiveis.map(condo => ({
-        value: condo.id, // UsuarioDTO deve ter condominioId
+        value: condo.id,
         label: `${condo.nome}${condo.endereco ? ' - ' + condo.endereco : ''}`
     })) : [];
-
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} title={usuarioExistente ? "Editar Usuário" : "Adicionar Usuário"}>
@@ -115,7 +118,6 @@ const EditUserModal = ({ isOpen, onClose, onSave, usuarioExistente, condominiosD
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    // readOnly={!!usuarioExistente} // Emails geralmente não são editáveis
                 />
                 <FormInput
                     label="Nova Senha (deixe em branco para não alterar):"
@@ -142,7 +144,6 @@ const EditUserModal = ({ isOpen, onClose, onSave, usuarioExistente, condominiosD
                     options={statusUsuarioOptions}
                     required
                 />
-                
                 <FormInput
                     label="Condomínio:"
                     name="condominioId"
@@ -150,10 +151,8 @@ const EditUserModal = ({ isOpen, onClose, onSave, usuarioExistente, condominiosD
                     value={formData.condominioId}
                     onChange={handleChange}
                     options={[{ value: '', label: 'Nenhum / Não Associado' }, ...condominiosOptions]}
-                    // Não é obrigatório para ADMIN, mas pode ser para USUARIO/SINDICO
                     required={(formData.tipoUsuario === 'USUARIO' || formData.tipoUsuario === 'SINDICO')} 
                 />
-
                 <div className="admin-modal-actions">
                     <Button type="submit" className="button-save">Salvar</Button>
                     <Button type="button" onClick={onClose} className="button-cancel">Cancelar</Button>

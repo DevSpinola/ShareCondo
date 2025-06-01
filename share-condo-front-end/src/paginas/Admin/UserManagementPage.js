@@ -48,14 +48,18 @@ const UserManagementPage = () => {
     // Função para criar o componente EditUserModal com as props necessárias
     // O CrudTabela chamará esta função passando suas próprias props (isOpen, onClose, itemParaEditar, onSalvar)
     const renderEditUserModal = (crudTabelaProps) => {
-        // crudTabelaProps inclui: isOpen, onClose, itemParaEditar, onSalvar (que chama updateById)
+        // Extrai itemParaEditar e o restante das props
+        const { itemParaEditar, ...restCrudTabelaProps } = crudTabelaProps;
+        
+        // Log para confirmar os dados que estão sendo mapeados
+        console.log('[UserManagementPage] Mapeando itemParaEditar para usuarioExistente:', itemParaEditar);
+
         return (
             <EditUserModal
-                {...crudTabelaProps} // Passa as props do CrudTabela (isOpen, onClose, itemParaEditar, onSave)
-                // onSave já está configurado pelo CrudTabela para chamar updateById(item.id, data)
-                // Precisamos passar condominiosDisponiveis para o modal
+                {...restCrudTabelaProps} // Passa props como isOpen, onClose, onSave
+                usuarioExistente={itemParaEditar} // Mapeia explicitamente para a prop esperada pelo EditUserModal
                 condominiosDisponiveis={condominios}
-                onSuccess={handleDataChange} // Para o modal poder chamar o refresh da tabela após salvar
+                onSuccess={handleDataChange}
             />
         );
     };
