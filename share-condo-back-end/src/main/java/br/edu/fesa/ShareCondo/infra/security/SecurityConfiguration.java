@@ -36,10 +36,10 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/usuario/pendentes").hasAnyRole("SINDICO", "ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/usuario/{id}/aprovar").hasAnyRole("SINDICO", "ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/usuario/{id}/rejeitar").hasAnyRole("SINDICO", "ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/usuario/{id}").authenticated() // Permitir que o próprio usuário veja seus dados
-                        .requestMatchers(HttpMethod.GET, "/usuario").hasRole("ADMIN") // Listar todos apenas para ADMIN
-                        .requestMatchers(HttpMethod.PUT, "/usuario/**").authenticated() // Regras mais finas no controller
-                        .requestMatchers(HttpMethod.PATCH, "/usuario/**").authenticated() // Regras mais finas no controller
+                        .requestMatchers(HttpMethod.GET, "/usuario/{id}").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/usuario").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/usuario/**").authenticated()
+                        .requestMatchers(HttpMethod.PATCH, "/usuario/**").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/usuario/**").hasRole("ADMIN")
 
 
@@ -47,22 +47,25 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/condominio").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/condominio/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/condominio/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/condominio/**").permitAll() // Permitir listar para cadastro
+                        .requestMatchers(HttpMethod.GET, "/condominio/**").permitAll()
 
                         // Anúncios
-                        .requestMatchers(HttpMethod.POST, "/anuncios").hasRole("USER") // ROLE_USER é adicionada a todos autenticados
+                        .requestMatchers(HttpMethod.POST, "/anuncios").hasRole("USER")
                         .requestMatchers(HttpMethod.GET, "/anuncios/meus").hasRole("USER")
                         .requestMatchers(HttpMethod.PUT, "/anuncios/**").hasRole("USER")
-                        .requestMatchers(HttpMethod.DELETE, "/anuncios/**").hasRole("USER") // Ou regras mais finas no controller
-                        .requestMatchers(HttpMethod.GET, "/anuncios/**").hasRole("USER") // Filtrado no controller por condomínio
+                        .requestMatchers(HttpMethod.DELETE, "/anuncios/**").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "/anuncios/**").hasRole("USER")
 
                         // Ofertas
                         .requestMatchers(HttpMethod.POST, "/ofertas/**").hasRole("USER")
-                        .requestMatchers(HttpMethod.PATCH, "/ofertas/{ofertaId}/aceitar").hasRole("USER") // Dono do anúncio
-                        .requestMatchers(HttpMethod.PATCH, "/ofertas/{ofertaId}/recusar").hasRole("USER") // Dono do anúncio
-                        .requestMatchers(HttpMethod.GET, "/ofertas/**").hasRole("USER") // Filtrado no controller
+                        .requestMatchers(HttpMethod.PATCH, "/ofertas/{ofertaId}/aceitar").hasRole("USER")
+                        .requestMatchers(HttpMethod.PATCH, "/ofertas/{ofertaId}/recusar").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "/ofertas/**").hasRole("USER")
 
-                        .anyRequest().authenticated() // Outras requisições precisam de autenticação
+                        // Dashboard (NOVO)
+                        .requestMatchers(HttpMethod.GET, "/dashboard/stats").hasRole("ADMIN")
+
+                        .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

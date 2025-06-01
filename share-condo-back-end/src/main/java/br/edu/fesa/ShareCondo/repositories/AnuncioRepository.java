@@ -9,5 +9,6 @@ import java.util.List;
 @Repository
 public interface AnuncioRepository extends JpaRepository<Anuncio, String> {
     List<Anuncio> findByAnuncianteId(String anuncianteId);
-    long countByAnuncianteIdAndAtivo(String anuncianteId, boolean ativo); // <-- NOVO MÉTODO
+    long countByAnuncianteIdAndAtivo(String anuncianteId, boolean ativo);
+    long countByAtivo(boolean ativo); // NOVO MÉTODO (ou confirmar se já existia um similar)
 }
