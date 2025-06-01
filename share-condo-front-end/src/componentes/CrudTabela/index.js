@@ -128,9 +128,10 @@ const CrudTabela = ({
   const dataFields = Object.values(campos_map);
 
   const renderFieldValue = (item, fieldPath) => {
+    let value;
     if (fieldPath.includes('.')) {
       const parts = fieldPath.split('.');
-      let value = item;
+      value = item;
       for (const part of parts) {
         if (value && typeof value === 'object' && part in value) {
           value = value[part];
@@ -138,23 +139,28 @@ const CrudTabela = ({
           return 'N/A'; // Ou algum placeholder
         }
       }
-      // Formatação específica para datas
-      if (typeof value === 'string' && (fieldPath.toLowerCase().includes('data') || fieldPath.toLowerCase().includes('date'))) {
+    } else {
+      value = item[fieldPath];
+    }
+
+    // Adiciona tratamento para valores booleanos
+    if (typeof value === 'boolean') {
+      // Você pode mudar para "Ativo"/"Inativo" ou "1"/"0" se preferir
+      return value ? 'Sim' : 'Não'; 
+    }
+
+    // Formatação específica para datas (lógica existente)
+    if (typeof value === 'string' && (fieldPath.toLowerCase().includes('data') || fieldPath.toLowerCase().includes('date'))) {
         const date = new Date(value);
         if (!isNaN(date.getTime())) {
           return date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' }) + ' ' + date.toLocaleTimeString('pt-BR');
         }
-      }
-      return value;
     }
-    // Formatação específica para datas (campos não aninhados)
-    if (typeof item[fieldPath] === 'string' && (fieldPath.toLowerCase().includes('data') || fieldPath.toLowerCase().includes('date'))) {
-        const date = new Date(item[fieldPath]);
-        if (!isNaN(date.getTime())) {
-          return date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' }) + ' ' + date.toLocaleTimeString('pt-BR');
-        }
-    }
-    return item[fieldPath];
+    
+    // Para outros tipos de valores, ou se for null/undefined, retorna como está (ou um placeholder)
+    // Se 'value' for null ou undefined, pode aparecer em branco. Pode-se adicionar um placeholder aqui também se desejado.
+    // Ex: if (value === null || value === undefined) return 'N/D';
+    return value;
   };
 
 
