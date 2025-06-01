@@ -1,3 +1,4 @@
+// src/servicos/auth.js
 import axios from "axios";
 
 const authAPI = axios.create({
@@ -10,19 +11,20 @@ async function login(email, senha) {
   const { token, usuario } = response.data;
 
   localStorage.setItem("token", token);
-  localStorage.setItem("usuario", JSON.stringify(usuario));
+  localStorage.setItem("usuario", JSON.stringify(usuario)); // usuario já é o UsuarioDTO do backend
 
   return { token, usuario };
 }
 
-// Cadastro mantém o mesmo comportamento
-async function cadastro(email, nome, senha, tipoUsuario = "USUARIO") {
-  return await authAPI.post("/register", {
-    email,
-    nome,
-    senha,
-    tipoUsuario
-  });
+// Cadastro atualizado para incluir condominioId
+async function cadastro(email, nome, senha, tipoUsuario = "USUARIO", condominioId = null) {
+  const payload = { email, nome, senha, tipoUsuario };
+  // Backend espera condominioId para USUARIO e SINDICO
+  if ((tipoUsuario === "USUARIO" || tipoUsuario === "SINDICO") && condominioId) {
+    payload.condominioId = condominioId;
+  }
+  // ADMIN não precisa de condominioId no payload de cadastro
+  return await authAPI.post("/register", payload);
 }
 
 // Logout remove os dados do usuário
@@ -34,6 +36,7 @@ function logout() {
 // Recupera o usuário logado
 function getUsuarioLogado() {
   const usuario = localStorage.getItem("usuario");
+  // O backend já retorna UsuarioDTO em LoginResponseDTO, então o parse é direto
   return usuario ? JSON.parse(usuario) : null;
 }
 

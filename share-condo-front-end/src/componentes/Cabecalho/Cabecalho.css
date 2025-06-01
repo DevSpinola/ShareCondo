@@ -92,3 +92,15 @@
     font-weight: 600;
     margin-left: 12px;
   }
+
+  /* Em src/componentes/Cabecalho/Cabecalho.css */
+/* ... seu CSS existente ... */
+
+.user-actions-menu {
+  margin-right: 15px; /* Ou conforme necessário */
+}
+
+.username {
+  /* ... estilos existentes ... */
+  margin-right: 10px; /* Espaço antes do botão Sair */
+}

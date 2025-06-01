@@ -5,42 +5,66 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.GrantedAuthority;
 
+import java.util.ArrayList; // Importar ArrayList
 import java.util.List;
 import java.util.Collection;
 
 @Entity
 @Table(name = "usuarios")
 public class Usuario implements UserDetails {
-    //make a user class
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     private String nome;
+    @Column(unique = true) // Garantir que o email seja único
     private String email;
     private String senha;
+
     @Enumerated(EnumType.STRING)
-    private TipoUsuario tipoUsuario; //admin ou usuario comum
+    private TipoUsuario tipoUsuario;
+
+    @ManyToOne(fetch = FetchType.EAGER) // EAGER pode ser útil para obter o condomínio junto com o usuário
+    @JoinColumn(name = "condominio_id")
+    private Condominio condominio;
+
+    @Enumerated(EnumType.STRING)
+    private StatusUsuario statusUsuario; // PENDENTE_APROVACAO, APROVADO, REJEITADO
 
     public Usuario() {
+        this.statusUsuario = StatusUsuario.PENDENTE_APROVACAO; // Default para novos usuários
     }
 
-    public Usuario(String email, String nome, String senha, TipoUsuario tipoUsuario) {
+    public Usuario(String email, String nome, String senha, TipoUsuario tipoUsuario, Condominio condominio) {
         this.email = email;
         this.nome = nome;
         this.senha = senha;
         this.tipoUsuario = tipoUsuario;
+        this.condominio = condominio;
+        if (tipoUsuario == TipoUsuario.ADMIN || tipoUsuario == TipoUsuario.SINDICO) {
+            this.statusUsuario = StatusUsuario.APROVADO; // Admins e Síndicos são aprovados automaticamente
+        } else {
+            this.statusUsuario = StatusUsuario.PENDENTE_APROVACAO;
+        }
     }
 
-    @Override
-    public String toString() {
-        return "Usuario{" +
-                "nome='" + nome + '\'' +
-                ", email='" + email + '\'' +
-                ", senha='" + senha + '\'' +
-                ", tipoUsuario='" + tipoUsuario + '\'' +
-                '}';
+    // Getters e Setters para condominio e statusUsuario
+    public Condominio getCondominio() {
+        return condominio;
     }
 
+    public void setCondominio(Condominio condominio) {
+        this.condominio = condominio;
+    }
+
+    public StatusUsuario getStatusUsuario() {
+        return statusUsuario;
+    }
+
+    public void setStatusUsuario(StatusUsuario statusUsuario) {
+        this.statusUsuario = statusUsuario;
+    }
+
+    // ... (restante dos getters e setters existentes: id, nome, email, senha, tipoUsuario)
     public String getId() {
         return id;
     }
@@ -81,39 +105,62 @@ public class Usuario implements UserDetails {
         this.tipoUsuario = tipoUsuario;
     }
 
-    // Implementação dos métodos da interface UserDetails
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (this.tipoUsuario == TipoUsuario.ADMIN) {
-            return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"),
-                           new SimpleGrantedAuthority("ROLE_USER"));
-        } else {
-            return List.of(new SimpleGrantedAuthority("ROLE_USER"));
-        }
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_USER")); // Todo usuário é USER
 
+        if (this.tipoUsuario == TipoUsuario.ADMIN) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        } else if (this.tipoUsuario == TipoUsuario.SINDICO) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_SINDICO"));
+        }
+        return authorities;
     }
+
     @Override
     public String getPassword() {
-        return senha; // Retorne a senha do usuário
+        return senha;
     }
+
     @Override
     public String getUsername() {
-        return email; // Retorne o nome de usuário (ou email) do usuário
+        return email;
     }
+
     @Override
     public boolean isAccountNonExpired() {
-        return true; // Retorne true se a conta não estiver expirada
+        return true;
     }
+
     @Override
     public boolean isAccountNonLocked() {
-        return true; // Retorne true se a conta não estiver bloqueada
+        // Poderia ser usado para bloquear contas rejeitadas ou pendentes de aprovação
+        // return this.statusUsuario == StatusUsuario.APROVADO;
+        return true; // Simplificado por enquanto
     }
+
     @Override
     public boolean isCredentialsNonExpired() {
-        return true; // Retorne true se as credenciais não estiverem expiradas
+        return true;
     }
+
     @Override
     public boolean isEnabled() {
-        return true; // Retorne true se o usuário estiver habilitado
+        // Apenas usuários aprovados são considerados habilitados para funcionalidades completas
+        return this.statusUsuario == StatusUsuario.APROVADO;
+    }
+
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "id='" + id + '\'' +
+                ", nome='" + nome + '\'' +
+                ", email='" + email + '\'' +
+                ", tipoUsuario=" + tipoUsuario +
+                ", condominio=" + (condominio != null ? condominio.getNome() : "N/A") +
+                ", statusUsuario=" + statusUsuario +
+                '}';
     }
 }

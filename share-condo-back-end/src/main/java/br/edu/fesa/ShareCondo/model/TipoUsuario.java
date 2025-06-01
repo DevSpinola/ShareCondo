@@ -2,6 +2,7 @@ package br.edu.fesa.ShareCondo.model;
 
 public enum TipoUsuario {
     ADMIN("admin"),
+    SINDICO("sindico"), // NOVO TIPO
     USUARIO("usuario");
 
     private String tipo;
