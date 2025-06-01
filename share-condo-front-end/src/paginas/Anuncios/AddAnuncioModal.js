@@ -1,34 +1,37 @@
 // src/components/Anuncios/AddAnuncioModal.js
-import React, { useState } from 'react';
-import Modal from '../../componentes/Modal/Modal';
-import Button from '../../componentes/Botao/Button';
-
+import React, { useState } from "react";
+import Modal from "../../componentes/Modal/Modal";
+import Button from "../../componentes/Botao/Button";
 
 const AddAnuncioModal = ({ isOpen, onClose, onAddAnuncio }) => {
-  const [titulo, setTitulo] = useState('');
-  const [descricao, setDescricao] = useState('');
-  const [tipo, setTipo] = useState('item'); // 'item' ou 'servico'
+  const [titulo, setTitulo] = useState("");
+  const [descricao, setDescricao] = useState("");
+  const [tipo, setTipo] = useState("item"); // 'item' ou 'servico'
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!titulo.trim() || !descricao.trim()) {
-      alert('Por favor, preencha o título e a descrição.');
+      alert("Por favor, preencha o título e a descrição.");
       return;
     }
     // O AnunciosPage.js (ou quem chama onAddAnuncio)
     // será responsável por formar o payload final para a API.
     // Não precisamos mais de id ou usuario aqui.
-    onAddAnuncio({ titulo, descricao, tipo }); 
-    
+    onAddAnuncio({ titulo, descricao, tipo });
+
     // Limpar formulário e fechar modal
-    setTitulo('');
-    setDescricao('');
-    setTipo('item');
+    setTitulo("");
+    setDescricao("");
+    setTipo("item");
     onClose();
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Adicionar Novo Anúncio de Troca">
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title="Adicionar Novo Anúncio de Troca"
+    >
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="anuncio-titulo">Título do Anúncio:</label>
@@ -52,16 +55,27 @@ const AddAnuncioModal = ({ isOpen, onClose, onAddAnuncio }) => {
         </div>
         <div className="form-group">
           <label htmlFor="anuncio-tipo">Tipo de Anúncio:</label>
-          <select id="anuncio-tipo" value={tipo} onChange={(e) => setTipo(e.target.value)}>
+          <select
+            id="anuncio-tipo"
+            value={tipo}
+            onChange={(e) => setTipo(e.target.value)}
+          >
             <option value="item">Item</option>
             <option value="servico">Serviço</option>
           </select>
         </div>
-        <div style={{ textAlign: 'right', marginTop: '20px' }}>
-          <Button type="button" onClick={onClose} className="button-secondary" style={{ marginRight: '10px' }}>
+        <div style={{ textAlign: "right", marginTop: "20px" }}>
+          <Button
+            type="button"
+            onClick={onClose}
+            className="button-secondary"
+            style={{ marginRight: "10px" }}
+          >
             Cancelar
           </Button>
-          <Button type="submit">Adicionar Anúncio</Button>
+          <Button type="submit" className="button-primary">
+            Adicionar Anúncio
+          </Button>
         </div>
       </form>
     </Modal>

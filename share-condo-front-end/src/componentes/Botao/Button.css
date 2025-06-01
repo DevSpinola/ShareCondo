@@ -1,0 +1,70 @@
+/* src/componentes/Botao/Button.css */
+.custom-button {
+  padding: 10px 18px;
+  border-radius: 6px;
+  border: none;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out, box-shadow 0.2s ease;
+  text-decoration: none; /* Para casos onde o botão é um link estilizado */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.2;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.custom-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.custom-button:active {
+  transform: translateY(0px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Variação Primária (exemplo) */
+.custom-button.button-primary {
+  background-color: #0056b3; /* Cor do Cabecalho.css */
+  color: white;
+}
+
+.custom-button.button-primary:hover {
+  background-color: #004494; /* Um tom mais escuro */
+}
+
+/* Variação Secundária (exemplo) */
+.custom-button.button-secondary {
+  background-color: #6c757d; /* Cinza */
+  color: white;
+}
+
+.custom-button.button-secondary:hover {
+  background-color: #5a6268;
+}
+
+/* Variação Adicionar (exemplo para o botão "+ Adicionar Novo Anúncio") */
+.custom-button.button-add {
+  background-color: #28a745; /* Verde */
+  color: white;
+}
+.custom-button.button-add:hover {
+  background-color: #218838;
+}
+
+/* Variação de Perigo/Rejeitar (exemplo) */
+.custom-button.button-danger {
+  background-color: #dc3545; /* Vermelho */
+  color: white;
+}
+.custom-button.button-danger:hover {
+  background-color: #c82333;
+}
+
+/* Variação para botões com apenas ícone ou texto pequeno */
+.custom-button.button-small {
+  padding: 6px 12px;
+  font-size: 0.9rem;
+}

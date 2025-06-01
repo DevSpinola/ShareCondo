@@ -33,30 +33,31 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
 
                         // Usuários (CRUD - exemplo, pode precisar de mais granularidade)
-                        .requestMatchers(HttpMethod.GET, "/usuario/**").authenticated() // Permitir buscar usuários se autenticado
-                        .requestMatchers(HttpMethod.PUT, "/usuario/**").authenticated() // Permitir atualizar usuário se autenticado
+                        .requestMatchers(HttpMethod.GET, "/usuario/**").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/usuario/**").authenticated()
                         .requestMatchers(HttpMethod.PATCH, "/usuario/**").authenticated()
-                        .requestMatchers(HttpMethod.DELETE, "/usuario/**").hasRole("ADMIN") // Só admin deleta usuário
+                        .requestMatchers(HttpMethod.DELETE, "/usuario/**").hasRole("ADMIN")
 
                         // Condomínios (Exemplo: ADMIN gerencia, usuários podem listar/ver)
                         .requestMatchers(HttpMethod.POST, "/condominio").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/condominio/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/condominio/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/condominio/**").permitAll() // Permitir listagem para todos
+                        .requestMatchers(HttpMethod.GET, "/condominio/**").permitAll()
 
                         // Anúncios
-                        .requestMatchers(HttpMethod.POST, "/anuncios").authenticated() // Usuários autenticados podem criar
-                        .requestMatchers(HttpMethod.PUT, "/anuncios/**").authenticated() // Edição/deleção controlada no controller
+                        .requestMatchers(HttpMethod.GET, "/anuncios/meus").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/anuncios").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/anuncios/**").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/anuncios/**").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/anuncios/**").permitAll() // Permitir visualização para todos
+                        .requestMatchers(HttpMethod.GET, "/anuncios/**").permitAll()
 
                         // Ofertas
-                        .requestMatchers(HttpMethod.POST, "/ofertas/**").authenticated() // Usuários autenticados podem fazer ofertas
-                        .requestMatchers(HttpMethod.PUT, "/ofertas/**").authenticated() // Atualização de status, etc.
-                        .requestMatchers(HttpMethod.GET, "/ofertas/**").authenticated() // Ver ofertas
+                        .requestMatchers(HttpMethod.POST, "/ofertas/**").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/ofertas/**").authenticated()
+                        .requestMatchers(HttpMethod.PATCH, "/ofertas/**").authenticated() // <-- ADICIONADO
+                        .requestMatchers(HttpMethod.GET, "/ofertas/**").authenticated()
 
-                        // .requestMatchers(HttpMethod.POST, "/classificados").hasRole("ADMIN") // Regra anterior, ajuste se "classificados" for "anuncios"
-                        .anyRequest().authenticated() // Qualquer outra requisição precisa de autenticação
+                        .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

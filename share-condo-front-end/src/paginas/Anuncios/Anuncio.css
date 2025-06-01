@@ -1,70 +1,125 @@
-/* src/components/Anuncios/Anuncio.css */
+/* src/paginas/Anuncios/Anuncio.css */
 .anuncios-page-container {
-  padding: 20px;
+  padding: 25px;
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 20px auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .anuncios-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 25px;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .anuncios-header h1 {
-  color: #003366; /* Cor do Cabecalho.css */
+  color: #003366;
   margin: 0;
+  font-size: 2em;
+}
+
+/* Garante que o botão de adicionar no header tenha uma margem à esquerda */
+.anuncios-header .custom-button.button-add {
+  margin-left: 20px; /* Ajuste o valor conforme necessário */
+}
+
+/* Feedback messages */
+.feedback-message {
+  padding: 10px 15px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.feedback-message.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.feedback-message.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
 }
 
 .anuncios-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 25px;
 }
 
 .anuncio-card {
   border: 1px solid #e0e0e0;
   border-radius: 8px;
-  padding: 15px;
+  padding: 20px;
   background-color: #fff;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.anuncio-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
 }
 
 .anuncio-card h3 {
   margin-top: 0;
-  color: #0056b3; /* Cor do botão no Cabecalho.css */
-  font-size: 1.25em;
+  color: #0056b3;
+  font-size: 1.35em;
+  margin-bottom: 10px;
 }
 
 .anuncio-tipo {
   font-size: 0.9em;
   color: #555;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
+  background-color: #f0f0f0;
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: inline-block;
 }
 
 .anuncio-descricao {
   font-size: 1em;
-  color: #444;
+  color: #333;
   flex-grow: 1;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
+  line-height: 1.6;
 }
 
 .anuncio-usuario {
   font-size: 0.85em;
   color: #777;
-  margin-top: auto; /* Empurra para o final do card */
+  margin-top: auto;
   padding-top: 10px;
   border-top: 1px dashed #eee;
 }
 
-/* Estilos para botões dentro do Anuncio.css, se necessário, ou use os globais */
-.anuncio-card .custom-button { /* Exemplo de como customizar o botão UI */
-  align-self: flex-start; /* Alinha o botão Fazer Oferta */
-  margin-top: 10px;
+.anuncio-card .custom-button {
+  align-self: flex-start;
+  margin-top: 15px;
+  background-color: #007bff;
+  color: white;
 }
 
-/* Estilos para os modais já estão em UI.css, mas pode adicionar específicos aqui se precisar */
+.anuncio-card .custom-button:hover {
+  background-color: #0056b3;
+}
+
+.anuncios-page-container > p {
+  text-align: center;
+  font-size: 1.1em;
+  color: #555;
+  margin-top: 30px;
+}
+.anuncios-page-container > p[style*="color: red"] {
+  color: #dc3545 !important;
+  font-weight: 500;
+}

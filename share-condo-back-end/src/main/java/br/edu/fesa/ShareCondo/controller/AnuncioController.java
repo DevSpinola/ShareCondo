@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.transaction.annotation.Transactional; // Importante para lazy loading
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -29,7 +29,7 @@ public class AnuncioController {
     private UsuarioRepository usuarioRepository;
 
     @PostMapping
-    @Transactional // Garante que a sessão do Hibernate esteja ativa para o anunciante
+    @Transactional
     public ResponseEntity<?> criarAnuncio(@RequestBody AnuncioRequestDTO anuncioRequestDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated() || "anonymousUser".equals(authentication.getPrincipal())) {
@@ -56,16 +56,43 @@ public class AnuncioController {
     }
 
     @GetMapping
-    @Transactional(readOnly = true) // Para lazy loading de ofertas e anunciante
+    @Transactional(readOnly = true)
     public ResponseEntity<List<AnuncioResponseDTO>> listarAnuncios() {
         List<AnuncioResponseDTO> dtos = anuncioRepository.findAll().stream()
-                .map(AnuncioResponseDTO::new) // O construtor do DTO lidará com o mapeamento
+                .map(AnuncioResponseDTO::new)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(dtos);
     }
 
+    // NOVO MÉTODO ADICIONADO AQUI
+    @GetMapping("/meus")
+    @Transactional(readOnly = true)
+    public ResponseEntity<?> listarAnunciosDoUsuarioLogado() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || "anonymousUser".equals(authentication.getPrincipal())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuário não autenticado.");
+        }
+
+        String userEmail = authentication.getName();
+        Usuario usuarioLogado = (Usuario) usuarioRepository.findByEmail(userEmail);
+
+        if (usuarioLogado == null) {
+            // Embora o SecurityFilter deva prevenir isso se o token for válido e o usuário existir,
+            // é uma boa prática verificar.
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário anunciante não encontrado com o email: " + userEmail);
+        }
+
+        List<Anuncio> anunciosDoUsuario = anuncioRepository.findByAnuncianteId(usuarioLogado.getId());
+        List<AnuncioResponseDTO> dtos = anunciosDoUsuario.stream()
+                .map(AnuncioResponseDTO::new)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(dtos);
+    }
+    // FIM DO NOVO MÉTODO
+
     @GetMapping("/{id}")
-    @Transactional(readOnly = true) // Para lazy loading de ofertas e anunciante
+    @Transactional(readOnly = true)
     public ResponseEntity<AnuncioResponseDTO> buscarAnuncioPorId(@PathVariable String id) {
         return anuncioRepository.findById(id)
                 .map(anuncio -> ResponseEntity.ok(new AnuncioResponseDTO(anuncio)))
@@ -102,7 +129,6 @@ public class AnuncioController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // O método delete pode permanecer similar, mas a verificação de autorização deve ser mantida.
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity<?> deletarAnuncio(@PathVariable String id) {

@@ -1,17 +1,39 @@
 /* src/paginas/MinhasOfertas/MinhasOfertas.css */
 .minhas-ofertas-container {
-  padding: 20px;
-  max-width: 800px;
-  margin: 20px auto;
+  padding: 25px;
+  max-width: 900px;
+  margin: 30px auto;
   background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .minhas-ofertas-container h1 {
   text-align: center;
   color: #003366;
-  margin-bottom: 25px;
+  margin-bottom: 30px;
+  font-size: 2em;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.minhas-ofertas-container > p {
+  text-align: center;
+  font-size: 1.1em;
+  color: #555;
+  margin: 25px 0;
+  padding: 15px;
+  background-color: #fff;
+  border-radius: 6px;
+  border: 1px solid #eee;
+}
+
+.minhas-ofertas-container > p[style*="color: red"] {
+  background-color: #f8d7da;
+  color: #721c24 !important;
+  border-color: #f5c6cb;
+  font-weight: 500;
 }
 
 .lista-minhas-ofertas {
@@ -20,40 +42,107 @@
 }
 
 .minha-oferta-card {
-  background-color: #fff;
-  border: 1px solid #e0e0e0;
-  border-radius: 6px;
-  padding: 15px;
-  margin-bottom: 15px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+  border: 1px solid #e0e0e0; /* Borda mais clara para definição */
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); /* Sombra ainda mais sutil */
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  background-color: #ffffff; /* Fundo branco padrão */
 }
 
+.minha-oferta-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.07);
+}
+
+/* Fundos suavemente coloridos baseados no status */
+.minha-oferta-card.status-pendente {
+  background-color: #fffaf0; /* Amarelo bem claro (FloralWhite ou similar) */
+  border-left: 4px solid #ffc107; /* Mantém uma fina borda para reforço */
+}
+.minha-oferta-card.status-aceita {
+  background-color: #f0fff0; /* Verde bem claro (Honeydew) */
+  border-left: 4px solid #28a745;
+}
+.minha-oferta-card.status-recusada {
+  background-color: #fff5f5; /* Vermelho bem claro (LavenderBlush ou Snow) */
+  border-left: 4px solid #dc3545;
+}
+.minha-oferta-card.status-cancelada {
+  background-color: #f8f9fa; /* Cinza bem claro (muito próximo ao branco) */
+  border-left: 4px solid #6c757d;
+}
+
+
 .minha-oferta-card p {
-  margin: 6px 0;
-  font-size: 0.95em;
+  margin: 8px 0;
+  font-size: 1rem;
   color: #333;
+  line-height: 1.6;
 }
 
 .minha-oferta-card strong {
-  color: #004d99; /* Um azul um pouco mais escuro para destaque */
+  color: #004080;
+  font-weight: 600;
 }
 
 .status-badge {
-  padding: 3px 8px;
-  border-radius: 12px;
-  font-size: 0.85em;
+  padding: 5px 12px;
+  border-radius: 16px;
+  font-size: 0.88em;
   font-weight: bold;
   color: white;
   text-transform: capitalize;
+  display: inline-block;
+  margin-top: 5px;
 }
 
-.status-pendente { background-color: #ffc107; color: #333; /* Amarelo */ }
-.status-aceita { background-color: #28a745; /* Verde */ }
-.status-recusada { background-color: #dc3545; /* Vermelho */ }
-.status-cancelada { background-color: #6c757d; /* Cinza */ }
+/* Cores dos badges de status (podem ser as mesmas ou ajustadas para contraste com o fundo suave) */
+.status-badge.status-pendente { background-color: #ffc107; color: #333; } /* Cor de texto escura para amarelo */
+.status-badge.status-aceita { background-color: #28a745; }
+.status-badge.status-recusada { background-color: #dc3545; }
+.status-badge.status-cancelada { background-color: #6c757d; }
 
-/* Ajuste para a borda esquerda com base no status (opcional, mas visualmente bom) */
-.minha-oferta-card.status-pendente { border-left: 5px solid #ffc107; }
-.minha-oferta-card.status-aceita { border-left: 5px solid #28a745; }
-.minha-oferta-card.status-recusada { border-left: 5px solid #dc3545; }
-.minha-oferta-card.status-cancelada { border-left: 5px solid #6c757d; }
+
+/* Detalhes da oferta */
+.minha-oferta-card .detalhe-oferta {
+  margin-bottom: 5px;
+}
+
+.minha-oferta-card .detalhe-oferta:last-child {
+  margin-bottom: 0;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .minhas-ofertas-container {
+    margin: 20px 15px;
+    padding: 20px;
+  }
+
+  .minhas-ofertas-container h1 {
+    font-size: 1.8em;
+  }
+
+  .minha-oferta-card {
+    padding: 15px;
+  }
+  
+  /* Ajuste para borda em telas menores se necessário */
+  .minha-oferta-card.status-pendente,
+  .minha-oferta-card.status-aceita,
+  .minha-oferta-card.status-recusada,
+  .minha-oferta-card.status-cancelada {
+    border-left-width: 3px;
+  }
+
+  .minha-oferta-card p {
+    font-size: 0.95rem;
+  }
+
+  .status-badge {
+    font-size: 0.8em;
+    padding: 4px 10px;
+  }
+}
