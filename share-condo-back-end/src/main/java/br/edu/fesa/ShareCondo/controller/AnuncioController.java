@@ -3,6 +3,7 @@ package br.edu.fesa.ShareCondo.controller;
 import br.edu.fesa.ShareCondo.model.Anuncio;
 import br.edu.fesa.ShareCondo.model.AnuncioRequestDTO;
 import br.edu.fesa.ShareCondo.model.AnuncioResponseDTO;
+import br.edu.fesa.ShareCondo.model.TipoUsuario;
 import br.edu.fesa.ShareCondo.model.Usuario;
 import br.edu.fesa.ShareCondo.repositories.AnuncioRepository;
 import br.edu.fesa.ShareCondo.repositories.UsuarioRepository;
@@ -28,6 +29,8 @@ public class AnuncioController {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    private static final int MAX_ACTIVE_ANNOUNCEMENTS_PER_USER = 5;
+
     @PostMapping
     @Transactional
     public ResponseEntity<?> criarAnuncio(@RequestBody AnuncioRequestDTO anuncioRequestDTO) {
@@ -41,6 +44,14 @@ public class AnuncioController {
 
         if (anunciante == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário anunciante não encontrado.");
+        }
+
+        if (anunciante.getTipoUsuario() == TipoUsuario.USUARIO) {
+            long activeAnnouncementsCount = anuncioRepository.countByAnuncianteIdAndAtivo(anunciante.getId(), true);
+            if (activeAnnouncementsCount >= MAX_ACTIVE_ANNOUNCEMENTS_PER_USER) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body("Você atingiu o limite máximo de " + MAX_ACTIVE_ANNOUNCEMENTS_PER_USER + " anúncios ativos.");
+            }
         }
 
         Anuncio novoAnuncio = new Anuncio();
@@ -64,7 +75,6 @@ public class AnuncioController {
         return ResponseEntity.ok(dtos);
     }
 
-    // NOVO MÉTODO ADICIONADO AQUI
     @GetMapping("/meus")
     @Transactional(readOnly = true)
     public ResponseEntity<?> listarAnunciosDoUsuarioLogado() {
@@ -77,8 +87,6 @@ public class AnuncioController {
         Usuario usuarioLogado = (Usuario) usuarioRepository.findByEmail(userEmail);
 
         if (usuarioLogado == null) {
-            // Embora o SecurityFilter deva prevenir isso se o token for válido e o usuário existir,
-            // é uma boa prática verificar.
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário anunciante não encontrado com o email: " + userEmail);
         }
 
@@ -89,7 +97,6 @@ public class AnuncioController {
 
         return ResponseEntity.ok(dtos);
     }
-    // FIM DO NOVO MÉTODO
 
     @GetMapping("/{id}")
     @Transactional(readOnly = true)
@@ -110,12 +117,24 @@ public class AnuncioController {
 
         return anuncioRepository.findById(id)
                 .map(anuncioExistente -> {
-                    Usuario usuarioLogado = (Usuario) usuarioRepository.findByEmail(userEmail);
+                    Usuario usuarioLogado = (Usuario) usuarioRepository.findByEmail(userEmail); // Esta é a variável correta para o usuário logado
                     if (usuarioLogado == null ||
                             (!anuncioExistente.getAnunciante().getId().equals(usuarioLogado.getId()) &&
-                                    usuarioLogado.getTipoUsuario() != br.edu.fesa.ShareCondo.model.TipoUsuario.ADMIN)) {
+                                    usuarioLogado.getTipoUsuario() != TipoUsuario.ADMIN)) { // Corrigido para usar a variável local TipoUsuario
                         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Usuário não autorizado a modificar este anúncio.");
                     }
+
+                    // Se o usuário estiver tentando ATIVAR um anúncio e for um USUARIO, verificar o limite
+                    // AQUI ESTAVA O ERRO: Usar usuarioLogado em vez de anunciante (que não existe neste escopo)
+                    if (usuarioLogado.getTipoUsuario() == TipoUsuario.USUARIO &&
+                            Boolean.TRUE.equals(anuncioRequestDTO.ativo()) && !anuncioExistente.isAtivo()) {
+                        long activeAnnouncementsCount = anuncioRepository.countByAnuncianteIdAndAtivo(usuarioLogado.getId(), true); // CORRIGIDO
+                        if (activeAnnouncementsCount >= MAX_ACTIVE_ANNOUNCEMENTS_PER_USER) {
+                            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                                    .body("Você atingiu o limite máximo de " + MAX_ACTIVE_ANNOUNCEMENTS_PER_USER + " anúncios ativos. Não é possível ativar este anúncio.");
+                        }
+                    }
+
 
                     anuncioExistente.setTitulo(anuncioRequestDTO.titulo());
                     anuncioExistente.setDescricao(anuncioRequestDTO.descricao());
@@ -143,7 +162,7 @@ public class AnuncioController {
                     Usuario usuarioLogado = (Usuario) usuarioRepository.findByEmail(userEmail);
                     if (usuarioLogado == null ||
                             (!anuncio.getAnunciante().getId().equals(usuarioLogado.getId()) &&
-                                    usuarioLogado.getTipoUsuario() != br.edu.fesa.ShareCondo.model.TipoUsuario.ADMIN)) {
+                                    usuarioLogado.getTipoUsuario() != TipoUsuario.ADMIN)) { // Corrigido para usar a variável local TipoUsuario
                         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Usuário não autorizado a deletar este anúncio.");
                     }
                     anuncioRepository.deleteById(id);
