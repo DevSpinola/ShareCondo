@@ -169,7 +169,7 @@ def populate():
     for user_spec in usuarios_specs:
         condo_ref = created_data["condominios_criados"][user_spec["condominio_idx"]]
         user_email = f"{user_spec['email_suffix']}@exemplo.com"
-        user_nome = f"{user_spec['nome_prefix']} ({condo_ref['nome']})"
+        user_nome = user_spec['nome_prefix'] # MODIFICADO AQUI
         
         user_entry = {
             "email": user_email, "pass": PASSWORD_PARA_TODOS, "nome": user_nome, 
