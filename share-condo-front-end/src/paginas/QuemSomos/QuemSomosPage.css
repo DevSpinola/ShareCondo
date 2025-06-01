@@ -1,0 +1,171 @@
+/* src/paginas/QuemSomos/QuemSomosPage.css */
+.quem-somos-container {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  color: #333;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.7;
+  background-color: #fff; /* Fundo branco para a área de conteúdo principal */
+}
+
+.quem-somos-header {
+  text-align: center;
+  margin-bottom: 50px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #0056b3; /* Usando um azul do tema */
+}
+
+.quem-somos-header h1 {
+  font-size: 3em;
+  color: #003366; /* Azul escuro do tema */
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.quem-somos-header .subtitle {
+  font-size: 1.3em;
+  color: #555;
+  font-weight: 300;
+}
+
+.quem-somos-section {
+  margin-bottom: 40px;
+  padding: 25px;
+  background-color: #f9f9f9; /* Um cinza bem claro para seções */
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+}
+
+.quem-somos-section h2 {
+  font-size: 2em;
+  color: #0056b3;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e0e0e0;
+  font-weight: 600;
+}
+
+.quem-somos-section p,
+.quem-somos-section ul {
+  font-size: 1.1em;
+  color: #444;
+  margin-bottom: 15px;
+}
+
+.quem-somos-section ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.quem-somos-section ul li {
+  padding-left: 25px;
+  position: relative;
+  margin-bottom: 10px;
+}
+
+.quem-somos-section ul li::before {
+  content: '✓'; /* Ou outro ícone/emoji como ✨, 💡, 🤝 */
+  color: #007bff; /* Azul vibrante */
+  position: absolute;
+  left: 0;
+  font-weight: bold;
+}
+
+.valores-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+  margin-top: 20px;
+}
+
+.valor-card {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #e7e7e7;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.valor-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+}
+
+.valor-card .icon {
+  font-size: 2.5em; /* Ajuste conforme o ícone */
+  margin-bottom: 15px;
+  color: #0056b3;
+}
+
+.valor-card h3 {
+  font-size: 1.4em;
+  color: #003366;
+  margin-bottom: 10px;
+}
+
+.call-to-action {
+  text-align: center;
+  padding: 30px;
+  background-color: #0056b3; /* Azul do tema */
+  color: #fff;
+  border-radius: 8px;
+  margin-top: 40px;
+}
+
+.call-to-action h2 {
+  font-size: 2.2em;
+  margin-bottom: 15px;
+  color: #fff;
+  border-bottom: none;
+}
+
+.call-to-action p {
+  font-size: 1.2em;
+  margin-bottom: 25px;
+  color: #f0f0f0;
+}
+
+.call-to-action .custom-button { /* Usando a classe do seu componente Button */
+  font-size: 1.2em;
+  padding: 12px 30px;
+  background-color: #ffc107; /* Amarelo para destaque */
+  color: #333;
+  border: none;
+  font-weight: bold;
+}
+.call-to-action .custom-button:hover {
+  background-color: #e0a800;
+}
+
+.team-section {
+    text-align: center;
+}
+
+.team-section img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-top: 20px;
+    max-height: 300px; /* Ajuste conforme necessário */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .quem-somos-header h1 {
+    font-size: 2.5em;
+  }
+  .quem-somos-header .subtitle {
+    font-size: 1.1em;
+  }
+  .quem-somos-section h2 {
+    font-size: 1.8em;
+  }
+  .call-to-action h2 {
+    font-size: 1.8em;
+  }
+}
