@@ -1,0 +1,68 @@
+/* src/paginas/Admin/AdminModal.css (ou um nome similar) */
+.admin-modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Espaço entre os inputs */
+}
+
+.admin-modal-form .form-input-container { /* Se seus FormInputs tiverem um container */
+    margin-bottom: 0; /* Resetar margem se já existir */
+}
+
+.admin-modal-form label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+    color: #333;
+}
+
+.admin-modal-form input[type="text"],
+.admin-modal-form input[type="email"],
+.admin-modal-form input[type="password"],
+.admin-modal-form select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Para incluir padding e border na largura/altura total */
+    font-size: 1rem;
+}
+
+.admin-modal-form select {
+    appearance: none; /* Para melhor customização se desejado */
+    background-color: white; /* Fundo para selects */
+}
+
+.admin-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.admin-modal-error, .modal-error { /* Classe para erros dentro do modal */
+    color: #D8000C; /* Vermelho para erro */
+    background-color: #FFD2D2; /* Fundo vermelho claro */
+    border: 1px solid #D8000C;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+/* Estilos para botões (se não forem herdados do Button.js/Button.css globalmente) */
+.admin-modal-actions .custom-button.button-save {
+  background-color: #007bff; /* Azul primário */
+  color: white;
+}
+.admin-modal-actions .custom-button.button-save:hover {
+  background-color: #0056b3;
+}
+
+.admin-modal-actions .custom-button.button-cancel {
+  background-color: #6c757d; /* Cinza secundário */
+  color: white;
+}
+.admin-modal-actions .custom-button.button-cancel:hover {
+  background-color: #545b62;
+}

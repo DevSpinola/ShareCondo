@@ -1,0 +1,170 @@
+/* src/paginas/Admin/AdminDashboardPage.css */
+.admin-dashboard {
+  padding: 20px;
+  text-align: left;
+}
+
+.admin-dashboard h1 {
+  color: #003366;
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 2em;
+}
+
+.admin-dashboard-image {
+  display: block;
+  margin: 0 auto 25px auto;
+  max-width: 200px;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.loading-message, .error-message {
+  text-align: center;
+  font-size: 1.1em;
+  padding: 15px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+.loading-message {
+  color: #0056b3;
+  background-color: #e7f3ff;
+  border: 1px solid #b3d7ff;
+}
+
+.error-message {
+  color: #721c24;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+}
+
+.dashboard-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); /* Ajustado minmax */
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.stat-card {
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  display: flex;
+  flex-direction: column; /* Para alinhar o sub-detail no final */
+  justify-content: space-between; /* Para empurrar o sub-detail para baixo */
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.stat-card h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #003366;
+  font-size: 1.3em;
+}
+
+.stat-card .stat-value {
+  font-size: 2.5em;
+  font-weight: bold;
+  color: #0056b3;
+  margin: 5px 0 5px 0;
+}
+
+.stat-card .stat-detail {
+  font-size: 0.95em;
+  color: #555;
+  margin-bottom: 10px; /* Aumentado para dar espaço à barra */
+}
+
+.stat-bar-container {
+  width: 100%;
+  background-color: #e9ecef;
+  border-radius: .25rem;
+  height: 18px; /* Altura da barra */
+  margin-bottom: 8px;
+  overflow: hidden; /* Para garantir que a barra interna não ultrapasse */
+}
+.stat-bar-container.neutral-bar { /* Para barras que não representam proporção */
+  background-color: #0056b3;
+}
+
+
+.stat-bar-filled {
+  height: 100%;
+  border-radius: .25rem; /* Para cantos arredondados da barra preenchida */
+  transition: width 0.5s ease-in-out; /* Animação suave da largura */
+  text-align: right;
+  padding-right: 5px;
+  box-sizing: border-box;
+  color: white;
+  font-size: 0.75em;
+  line-height: 18px; /* Alinhar texto verticalmente */
+}
+
+/* Cores específicas para cada barra */
+.stat-bar-filled.users-pending {
+  background-color: #ffc107; /* Amarelo para pendente */
+  color: #333;
+}
+.stat-bar-filled.anuncios-ativos {
+  background-color: #28a745; /* Verde para ativos */
+}
+.stat-bar-filled.ofertas-pendentes {
+  background-color: #fd7e14; /* Laranja para ofertas pendentes */
+}
+.stat-bar-filled.condos { /* Para o card de condomínios, se usar */
+  background-color: #007bff; /* Azul */
+}
+
+
+.stat-card .stat-sub-detail {
+  font-size: 0.9em;
+  color: #6c757d;
+  margin-top: 5px; /* Espaço após a barra */
+  min-height: 1.2em; /* Para manter o alinhamento mesmo se vazio */
+}
+
+
+.dashboard-intro-text {
+  font-size: 1.1em;
+  line-height: 1.6;
+  margin-bottom: 15px;
+  color: #333;
+}
+.dashboard-intro-text:first-of-type {
+  margin-top: 25px; 
+}
+
+
+.dashboard-features-list {
+  list-style-type: disc;
+  padding-left: 30px;
+  margin-bottom: 20px;
+}
+
+.dashboard-features-list li {
+  margin-bottom: 10px;
+  font-size: 1.05em;
+  color: #444;
+}
+
+.dashboard-features-list li strong {
+  color: #0056b3;
+}
+
+.dashboard-footer-text {
+  font-size: 1.1em;
+  line-height: 1.6;
+  margin-top: 20px;
+  color: #333;
+  font-style: italic;
+}

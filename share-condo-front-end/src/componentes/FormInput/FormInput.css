@@ -1,0 +1,54 @@
+.form-group {
+  margin: 15px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 8px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #003366;
+}
+
+.form-group input {
+  background-color: #f2f6ff;
+  border: 1px solid #ccc;
+  padding: 16px;
+  font-size: 16px;
+  border-radius: 8px;
+  transition: border 0.3s;
+}
+
+.form-group input:focus {
+  border-color: #0056b3;
+  outline: none;
+}
+
+/* src/componentes/FormInput/FormInput.css */
+/* ... seu CSS existente ... */
+
+.form-group select {
+  background-color: #f2f6ff;
+  border: 1px solid #ccc;
+  padding: 16px; /* Mesmo padding do input */
+  font-size: 16px; /* Mesmo font-size do input */
+  border-radius: 8px; /* Mesmo border-radius do input */
+  transition: border 0.3s;
+  width: 100%; /* Para ocupar a largura como o input */
+  box-sizing: border-box; /* Importante para o padding não estourar a largura */
+}
+
+.form-group select:focus {
+  border-color: #0056b3;
+  outline: none;
+}
+
+.info-text {
+  padding: 10px;
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9em;
+  color: #555;
+}

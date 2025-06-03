@@ -1,0 +1,233 @@
+/* src/paginas/Home/HomePage.css */
+.homepage-container {
+  width: 100%;
+}
+
+/* Hero Section */
+.hero-section {
+  /* Mantenha o background via CSS se desejar, mas remova a referência direta a hero-background.jpg do JS */
+  /* Exemplo: background: linear-gradient(rgba(0, 51, 102, 0.8), rgba(0, 86, 179, 0.7)), #003366; */
+  background-color: #004a99; /* Um azul sólido se não tiver imagem de fundo */
+  color: #fff;
+  padding: 70px 20px; /* Aumentado padding */
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh; /* Reduzido um pouco se não houver imagem de fundo forte */
+}
+
+.hero-section h1 {
+  font-size: 3.2em; /* Ajustado */
+  margin-bottom: 20px;
+  font-weight: 700;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.hero-section .hero-subtitle {
+  font-size: 1.4em; /* Ajustado */
+  margin-bottom: 35px; /* Aumentado */
+  max-width: 700px;
+  line-height: 1.6;
+  font-weight: 300;
+}
+
+.hero-cta-buttons .custom-button {
+  margin: 10px 10px; /* Adicionado margem vertical para telas menores */
+  padding: 14px 28px; /* Ajustado */
+  font-size: 1.15em; /* Ajustado */
+  border-radius: 25px;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.hero-cta-buttons .custom-button:hover {
+    transform: translateY(-3px);
+}
+
+.hero-cta-buttons .button-primary {
+    background-color: #ffc107;
+    color: #333;
+    font-weight: bold;
+}
+.hero-cta-buttons .button-primary:hover {
+    background-color: #e0a800;
+}
+
+.hero-cta-buttons .button-secondary {
+    background-color: transparent;
+    color: #fff;
+    border: 2px solid #fff;
+}
+.hero-cta-buttons .button-secondary:hover {
+    background-color: #fff;
+    color: #0056b3;
+}
+
+/* Seção "Como Funciona" */
+.como-funciona-section {
+  padding: 50px 20px; /* Ajustado */
+  text-align: center;
+  background-color: #f9f9f9;
+}
+
+.como-funciona-section h2 {
+  font-size: 2.3em; /* Ajustado */
+  color: #003366;
+  margin-bottom: 35px; /* Ajustado */
+}
+
+.passos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.passo-card {
+  background-color: #fff;
+  padding: 25px 20px; /* Ajustado */
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex; /* Para alinhar número e texto */
+  flex-direction: column; /* Para alinhar número e texto */
+  align-items: center; /* Centralizar conteúdo do card */
+}
+.passo-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+    
+.passo-card .passo-numero {
+    display: inline-flex; /* Alterado para inline-flex */
+    align-items: center;  /* Centralizar verticalmente */
+    justify-content: center; /* Centralizar horizontalmente */
+    background-color: #0056b3;
+    color: white;
+    width: 50px;  /* Aumentado */
+    height: 50px; /* Aumentado */
+    border-radius: 50%;
+    font-size: 1.8em; /* Aumentado */
+    font-weight: bold;
+    margin-bottom: 20px; /* Aumentado */
+}
+
+.passo-card h3 {
+  font-size: 1.4em; /* Ajustado */
+  color: #0056b3;
+  margin-bottom: 10px;
+}
+
+.passo-card p {
+  font-size: 1em;
+  color: #555;
+  line-height: 1.6;
+}
+
+/* Seção de Benefícios */
+.beneficios-section {
+    padding: 50px 20px; /* Ajustado */
+    text-align: center;
+    background-color: #ffffff;
+}
+.beneficios-section h2 {
+    font-size: 2.3em; /* Ajustado */
+    color: #003366;
+    margin-bottom: 35px; /* Ajustado */
+}
+
+.beneficio-card { 
+    background-color: #f9f9f9;
+    padding: 25px 20px; /* Ajustado */
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center; /* Garantir centralização do texto */
+}
+.beneficio-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+ .beneficio-card h3 {
+    font-size: 1.4em; /* Ajustado */
+    color: #0056b3;
+    margin-bottom: 10px;
+}
+ .beneficio-card p {
+    font-size: 1em;
+    color: #555;
+    line-height: 1.6;
+}
+
+/* Estilos para as seções existentes (Secao) */
+.home-secao { 
+    padding-top: 50px;
+    padding-bottom: 50px;
+    background-color: #fff; /* Garante fundo branco se não houver outro */
+}
+.home-secao:nth-of-type(odd) { /* Para alternar cor de fundo se desejar */
+    /* background-color: #f9f9f9; */
+}
+
+.home-secao .section-content { 
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* Call to Action Final */
+.final-cta-section {
+    padding: 50px 20px; /* Ajustado */
+    background-color: #003366;
+    color: #fff;
+    text-align: center;
+}
+.final-cta-section h2 {
+    font-size: 2em; /* Ajustado */
+    margin-bottom: 15px;
+}
+.final-cta-section p {
+    font-size: 1.15em; /* Ajustado */
+    margin-bottom: 30px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+ .final-cta-section .custom-button {
+    background-color: #ffc107;
+    color: #333;
+    font-weight: bold;
+    padding: 14px 30px; /* Ajustado */
+    font-size: 1.15em; /* Ajustado */
+    border-radius: 25px;
+}
+.final-cta-section .custom-button:hover {
+    background-color: #e0a800;
+}
+
+/* Responsividade geral */
+@media (max-width: 768px) {
+  .hero-section h1 {
+    font-size: 2.5em;
+  }
+  .hero-section .hero-subtitle {
+    font-size: 1.2em;
+  }
+  .hero-cta-buttons .custom-button {
+    font-size: 1em;
+    padding: 12px 25px;
+  }
+  .como-funciona-section h2, .beneficios-section h2 {
+    font-size: 2em;
+  }
+  .passo-card h3, .beneficio-card h3 {
+      font-size: 1.3em;
+  }
+  .final-cta-section h2 {
+    font-size: 1.8em;
+  }
+  .final-cta-section p {
+      font-size: 1.1em;
+  }
+}
